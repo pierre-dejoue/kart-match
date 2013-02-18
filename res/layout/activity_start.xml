@@ -1,7 +1,8 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -12,5 +13,98 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/kart_match_intro" />
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"  
+        android:layout_weight="1"  
+        android:gravity="center"
+        android:orientation="vertical" >
+        
+	    <LinearLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="0.5"
+	        android:gravity="center_horizontal|bottom"
+	        android:orientation="horizontal" >
+	
+	        <ImageView
+	            android:id="@+id/imageView1"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:src="@drawable/pilot" />
+	
+	        <Button
+	            android:id="@+id/pilot_button1"
+	            android:layout_width="40dp"
+	            android:layout_height="40dp"
+	            android:text="-"
+	            android:onClick="decNbOfPilots"
+	        />
+	
+	        <EditText
+	            android:id="@+id/editText1"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:ems="3"
+	            android:gravity="center"
+	            android:inputType="number" />
+	
+	        <Button
+	            android:id="@+id/pilot_button2"
+	            android:layout_width="40dp"
+	            android:layout_height="40dp"
+	            android:text="+"
+	            android:onClick="incNbOfPilots" 
+	        />
+	    </LinearLayout>
+	    
+	    <LinearLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="0.5"
+	        android:gravity="center_horizontal|top"
+	        android:orientation="horizontal" >
+	
+	        <ImageView
+	            android:id="@+id/imageView1"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:src="@drawable/kart" />
+	
+	        <Button
+	            android:id="@+id/kart_button1"
+	            android:layout_width="40dp"
+	            android:layout_height="40dp"
+	            android:text="-" 
+	            android:onClick="decMaxNbOfCars"
+	            />
+	
+	        <EditText
+	            android:id="@+id/editText2"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:ems="3"
+	            android:gravity="center"
+	            android:inputType="number" />
+	
+	        <Button
+	            android:id="@+id/kart_button2"
+	            android:layout_width="40dp"
+	            android:layout_height="40dp"
+	            android:text="+" 
+	            android:onClick="incMaxNbOfCars"
+	        />
+	        
+	    </LinearLayout>
+    </LinearLayout>
 
-</RelativeLayout>
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/ok_button" 
+        android:onClick="gotoNextActivity"
+    />
+
+</LinearLayout>
