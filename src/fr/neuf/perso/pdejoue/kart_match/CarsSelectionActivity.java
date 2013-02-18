@@ -31,6 +31,8 @@ public class CarsSelectionActivity extends Activity
 {
     private CustomApplication main_application = null;
     
+    private int original_text_color;
+    
     private CompoundButton.OnCheckedChangeListener car_selector = new CompoundButton.OnCheckedChangeListener() 
     {
         @Override
@@ -66,6 +68,10 @@ public class CarsSelectionActivity extends Activity
         // List of cars:
         build_scroll_view();
         
+        // Store original text color
+        Button submit_button = (Button)findViewById(R.id.submit_button);
+        original_text_color = submit_button.getCurrentTextColor();
+                
         // Update text of the submit button
         display_actual_nb_of_cars();
     }
@@ -150,13 +156,26 @@ public class CarsSelectionActivity extends Activity
     {
         Button submit_button = (Button)findViewById(R.id.submit_button);
         submit_button.setText("Valider (" + Integer.toString(main_application.getActualNbOfCars()) + " voitures)");
+        
+        // Set text color. (Red if the actual number of cars is zero. In that case access to the next Activity is blocked.)
+        if(main_application.getActualNbOfCars() == 0)
+        {
+            submit_button.setTextColor(getResources().getColor(R.color.dark_red));
+        }
+        else
+        {
+            submit_button.setTextColor(original_text_color);
+        }
     }
     
     public void gotoNextActivity(View v)
     {
-        // Launch next activity
-        Intent intent = new Intent(this, PilotsCarsValidateActivity.class);
-        startActivity(intent);
+        // Launch next activity if actual number of cars is different from zero
+        if(main_application.getActualNbOfCars() != 0)
+        {
+            Intent intent = new Intent(this, PilotsCarsValidateActivity.class);
+            startActivity(intent);
+        }
     }
 
 }

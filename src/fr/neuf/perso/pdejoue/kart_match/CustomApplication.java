@@ -24,8 +24,9 @@ public class CustomApplication extends Application
 {
     private final static String PILOTS_FILE = "pilotes.txt";
     
-    private ArrayList<String>  pilot_names = new  ArrayList<String>();             // Image of the internal save file PILOTS_FILE 
-    public  ArrayList<Integer> car_numbers = new  ArrayList<Integer>();            // Associates the car index with the actual car number
+    private ArrayList<String>  pilot_names = new  ArrayList<String>();              // Image of the internal save file PILOTS_FILE 
+    public  ArrayList<Integer> car_numbers = new  ArrayList<Integer>();             // Associates the car index with the actual car number
+    public  ArrayList<Integer> pilot_group = new  ArrayList<Integer>();             // Associates a pilot to its group
     
     public  int nb_of_pilots      = 0;      // Set by StartActivity.java
     public  int max_nb_of_cars    = 0;      // Set by StartActivity.java
@@ -264,8 +265,29 @@ public class CustomApplication extends Application
     public void setNbOfGroups()
     {
         // nb_of_groups must be the minimal integer such that: nb_of_groups * getActualNbOfCars() >= nb_of_pilots
+        //
+        // This number can be computed directly as follows: nb_of_groups = 1 + (nb_of_pilots-1)/getActualNbOfCars()
+        // But it is finally better to obtain indirectly while we initialize the pilot to group mapping array (pilot_group)
         
-        nb_of_groups = 1 + (nb_of_pilots-1)/getActualNbOfCars();
+        nb_of_groups = 1;
+        pilot_group.clear();
+        
+        int pilot_index = 0;
+        int car_counter = 0;
+       
+        while(pilot_index < nb_of_pilots)
+        {
+            if(car_counter >= getActualNbOfCars())          // Loop on the car_counter if it exceeds the actual number of cars available
+            {
+                car_counter = 0;
+                nb_of_groups++;
+            }
+            pilot_group.add(nb_of_groups);                  // Pilot 'pilot_index' associated to group 'nb_of_groups'
+            car_counter++;                                  // That pilot needs a car
+            pilot_index++;                                  // Next pilot
+        }
+        
+        // At the end of the previous loop, nb_of_groups is set to the correct value, i.e. the minimal number of groups that is required
     }
     
     public void regenerate_pilots_file() throws FileNotFoundException

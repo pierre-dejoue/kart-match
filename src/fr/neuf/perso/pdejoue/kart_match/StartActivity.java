@@ -24,10 +24,10 @@ import android.widget.EditText;
 public class StartActivity extends Activity 
 {
     private static final int MIN_NB_OF_PILOTS = 1;
-    private static final int MAX_NB_OF_PILOTS = 40;
+    private static final int MAX_NB_OF_PILOTS = 99;
     
     private static final int MIN_NB_OF_CARS = 1;
-    private static final int MAX_NB_OF_CARS = 40;
+    private static final int MAX_NB_OF_CARS = 99;
     
     private SharedPreferences settings = null;
     private CustomApplication main_application = null;
