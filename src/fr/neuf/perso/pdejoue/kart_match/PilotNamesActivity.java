@@ -113,7 +113,7 @@ public class PilotNamesActivity extends Activity
     private void setupActionBar() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             getActionBar().setDisplayHomeAsUpEnabled(false);
-            getActionBar().setTitle("Noms des pilotes");
+            getActionBar().setTitle(R.string.title_activity_pilot_names);
         }
     }
 

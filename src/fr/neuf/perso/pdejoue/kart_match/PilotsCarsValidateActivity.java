@@ -52,7 +52,7 @@ public class PilotsCarsValidateActivity extends Activity
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) 
         {
             getActionBar().setDisplayHomeAsUpEnabled(false);
-            getActionBar().setTitle("Ecran de confirmation");
+            getActionBar().setTitle(R.string.title_activity_pilots_cars_validate);
         }
     }
 

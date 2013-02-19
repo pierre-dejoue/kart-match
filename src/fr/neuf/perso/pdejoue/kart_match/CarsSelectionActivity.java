@@ -85,7 +85,7 @@ public class CarsSelectionActivity extends Activity
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) 
         {
             getActionBar().setDisplayHomeAsUpEnabled(false);
-            getActionBar().setTitle("Sélection des voitures");
+            getActionBar().setTitle(R.string.title_activity_cars_selection);
         }
     }
 
