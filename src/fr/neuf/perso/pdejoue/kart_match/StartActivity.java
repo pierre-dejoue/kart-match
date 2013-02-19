@@ -35,6 +35,10 @@ public class StartActivity extends Activity
     private EditText text1;        // Nb of pilots
     private EditText text2;        // Nb of cars
 
+    //
+    // Overridden methods
+    //
+
     @Override
     protected void onCreate(Bundle savedInstanceState) 
     {
@@ -82,6 +86,10 @@ public class StartActivity extends Activity
             }
         });
     }
+    
+    //
+    // Class specific methods
+    //
     
     private void validate_nb_of_pilots(int num)
     {

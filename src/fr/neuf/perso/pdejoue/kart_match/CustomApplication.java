@@ -16,6 +16,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 
 import android.app.Application;
 import android.content.Context;
@@ -26,11 +28,15 @@ public class CustomApplication extends Application
     
     private ArrayList<String>  pilot_names = new  ArrayList<String>();              // Image of the internal save file PILOTS_FILE 
     public  ArrayList<Integer> car_numbers = new  ArrayList<Integer>();             // Associates the car index with the actual car number
-    public  ArrayList<Integer> pilot_group = new  ArrayList<Integer>();             // Associates a pilot to its group
+    public  ArrayList<Integer> pilot_group = new  ArrayList<Integer>();             // Associates a pilot to its group. Group number starts at 1
     
     public  int nb_of_pilots      = 0;      // Set by StartActivity.java
     public  int max_nb_of_cars    = 0;      // Set by StartActivity.java
     private int nb_of_groups      = 0;      // Set by PilotsCarsValidateActivity.java
+    
+    private ArrayList<RaceDetails>        race_history         = null;
+    private ArrayList<HashSet<Integer>>   pilot_preferred_cars = null;              // pilot_preferred_cars[pilot_index] = set of car indexes 
+                                                                                    // Car indexes goes from 0 to (getActualNbOfCars()-1)
 
     public int getActualNbOfCars()
     {
@@ -42,6 +48,12 @@ public class CustomApplication extends Application
     {
         // Always call parent's onCreate
         super.onCreate();
+        
+        //
+        // Data structure inits
+        //
+        race_history         = new ArrayList<RaceDetails>();
+        pilot_preferred_cars = new ArrayList<HashSet<Integer>>();
         
         //
         // Initial read of file PILOTS_FILE, if the file does not exist is is created
@@ -257,6 +269,21 @@ public class CustomApplication extends Application
         regenerate_pilots_file();
     }
     
+    public void regenerate_pilots_file() throws FileNotFoundException
+    {
+        // Open empty back up file
+        PrintWriter writer  = new PrintWriter(openFileOutput(PILOTS_FILE , Context.MODE_PRIVATE));
+        
+        // Copy list
+        for(String s: pilot_names)
+        {
+            writer.println(s);
+        }
+        
+        // Close file
+        writer.close();
+    }
+    
     public int  getNbOfGroups()
     {
         return nb_of_groups;
@@ -290,18 +317,102 @@ public class CustomApplication extends Application
         // At the end of the previous loop, nb_of_groups is set to the correct value, i.e. the minimal number of groups that is required
     }
     
-    public void regenerate_pilots_file() throws FileNotFoundException
+    public int getGroupSize(int group_nb)
     {
-        // Open empty back up file
-        PrintWriter writer  = new PrintWriter(openFileOutput(PILOTS_FILE , Context.MODE_PRIVATE));
-        
-        // Copy list
-        for(String s: pilot_names)
+        if(group_nb < 1 || group_nb > getNbOfGroups())
         {
-            writer.println(s);
+            return 0;
+        }
+        int count = 0;
+        for(int num : pilot_group)
+        {
+            if(num == group_nb)
+            {
+                count++;
+            }
+        }
+        return count;        
+    }
+    
+    public boolean isGroupSizeOK(int group_nb)
+    {
+        if(group_nb < 1 || group_nb > getNbOfGroups())
+        {
+            return false;
+        } 
+        return (getGroupSize(group_nb) <= getActualNbOfCars());               
+    }
+    
+    public boolean allGroupSizesOK()
+    {
+        // Count number of pilot for all groups
+        int[] count_array = new int[getNbOfGroups()];
+        Arrays.fill(count_array, 0);
+        for(int num : pilot_group)
+        {
+            count_array[num-1]++;
         }
         
-        // Close file
-        writer.close();
+        boolean ret_bool = true;
+        
+        for(int group_nb = 1; group_nb <= getNbOfGroups(); group_nb++)
+        {
+            ret_bool &= (count_array[group_nb-1] <= getActualNbOfCars());
+        }
+        
+        return ret_bool;
+    }
+    
+    public ArrayList<String> getRaceHistoryList()
+    {
+        ArrayList<String>   list = new ArrayList<String>();
+        
+        for(RaceDetails rd : race_history)
+        {
+            list.add("Groupe " + Integer.toString(rd.group_nb) + ", course " + Integer.toString(rd.race_nb));
+        }
+        
+        return list;
+    }
+    
+    public int getNextRaceNb(int group_nb)
+    {
+        int race_nb = 1;
+        
+        for(RaceDetails rd : race_history)
+        {
+            if(rd.group_nb == group_nb)
+            {
+                race_nb++;
+            }
+        }
+        
+        return race_nb;
+    }
+    
+    public void reset_race_history()
+    {
+        race_history.clear();
+        pilot_preferred_cars.clear();
+        
+        for(int pilot_index = 0; pilot_index < nb_of_pilots; pilot_index++)
+        {
+            HashSet<Integer> new_car_set = new HashSet<Integer>();
+            pilot_preferred_cars.add(new_car_set);
+            for(int car_index = 0; car_index < getActualNbOfCars(); car_index++)
+            {
+                new_car_set.add(car_index);
+            }          
+        }       
+    }
+    
+    public void save_in_race_history(int group_nb, int race_nb)
+    {
+        RaceDetails rd = new RaceDetails();
+        
+        rd.group_nb = group_nb;
+        rd.race_nb  = race_nb;
+        
+        race_history.add(rd);
     }
 }

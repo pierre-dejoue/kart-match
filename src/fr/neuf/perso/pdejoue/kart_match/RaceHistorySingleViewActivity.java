@@ -1,7 +1,7 @@
 /**
- * KartMatch: PilotsCarsValidateActivity.java
+ * KartMatch: RaceHistorySingleViewActivity.java
  *
- *   Validation screen for the number of pilots, the number of cars and the number of groups. After that screen, those numbers are fixed.
+ *   Screen that displays the details of a race.
  *
  * Copyright (C) 2013, Pierre DEJOUE
  * All rights reserved.
@@ -9,71 +9,66 @@
  */
 package fr.neuf.perso.pdejoue.kart_match;
 
-import android.os.Bundle;
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.os.Build;
+import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.TextView;
-import android.support.v4.app.NavUtils;
-import android.annotation.TargetApi;
-import android.content.Intent;
-import android.os.Build;
 
-public class PilotsCarsValidateActivity extends Activity 
+public class RaceHistorySingleViewActivity extends Activity 
 {
     private CustomApplication main_application = null;
- 
+    
     //
     // Overridden methods
     //
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) 
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pilots_cars_validate);
+        setContentView(R.layout.activity_race_history_single_view);
         main_application = (CustomApplication)getApplication();
         
         // Show the Up button in the action bar.
         setupActionBar();
         
-        // Compute the number of groups for the championship based on the number of pilots and number of cars
-        main_application.setNbOfGroups();
+        // Get race Id  and display its information
+        Bundle extras = getIntent().getExtras();
+        int race_id = extras.getInt("race_id");
         
-        // Set executive summary text
-        TextView summary = (TextView)findViewById(R.id.groups);
-        summary.setText("Nombre de pilotes:  " + Integer.toString(main_application.nb_of_pilots)        + "\n" + 
-                        "Nombre de voitures: " + Integer.toString(main_application.getActualNbOfCars()) + "\n" + 
-                        "Nombre de groupes:  " + Integer.toString(main_application.getNbOfGroups())              
-                       );
+        TextView text = (TextView)findViewById(R.id.race_view_introduction);
+        text.setText(main_application.getRaceHistoryList().get(race_id));
     }
 
     /**
      * Set up the {@link android.app.ActionBar}, if the API is available.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    private void setupActionBar() 
-    {
+    private void setupActionBar() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) 
         {
             getActionBar().setDisplayHomeAsUpEnabled(false);
-            getActionBar().setTitle(R.string.title_activity_pilots_cars_validate);
+            getActionBar().setTitle(R.string.title_activity_race_history_single_view);
         }
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
+    public boolean onCreateOptionsMenu(Menu menu) 
     {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.pilots_cars_validate, menu);
+        getMenuInflater().inflate(R.menu.race_history_single_view, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
+    public boolean onOptionsItemSelected(MenuItem item) 
     {
-        switch (item.getItemId()) {
+        switch (item.getItemId()) 
+        {
         case android.R.id.home:
             // This ID represents the Home or Up button. In the case of this
             // activity, the Up button is shown. Use NavUtils to allow users
@@ -86,16 +81,6 @@ public class PilotsCarsValidateActivity extends Activity
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-    
-    public void gotoNextActivity(View v)
-    {
-        // Reset the race history
-        main_application.reset_race_history();
-        
-        // Launch next activity if actual number of cars is different from zero
-        Intent intent = new Intent(this, RaceHistoryActivity.class);
-        startActivity(intent);
     }
 
 }

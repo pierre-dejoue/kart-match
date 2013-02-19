@@ -30,9 +30,13 @@ import android.widget.LinearLayout;
 public class CarsSelectionActivity extends Activity 
 {
     private CustomApplication main_application = null;
-    
     private int original_text_color;
-    
+
+    //
+    // Listeners
+    //
+
+    // Listener for the check buttons
     private CompoundButton.OnCheckedChangeListener car_selector = new CompoundButton.OnCheckedChangeListener() 
     {
         @Override
@@ -51,6 +55,10 @@ public class CarsSelectionActivity extends Activity
             display_actual_nb_of_cars();
         }
     };  
+    
+    //
+    // Overridden methods
+    //
     
     @Override
     protected void onCreate(Bundle savedInstanceState) 
@@ -97,8 +105,10 @@ public class CarsSelectionActivity extends Activity
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
+    public boolean onOptionsItemSelected(MenuItem item) 
+    {
+        switch (item.getItemId()) 
+        {
         case android.R.id.home:
             // This ID represents the Home or Up button. In the case of this
             // activity, the Up button is shown. Use NavUtils to allow users
@@ -135,7 +145,7 @@ public class CarsSelectionActivity extends Activity
             EditText new_text_view = new EditText(this);
             new_text_view.setText(Integer.toString(car_number));
             new_text_view.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, 1.0f));
-            new_text_view.setInputType(InputType.TYPE_NULL);            // Text is not editable
+            new_text_view.setInputType(InputType.TYPE_NULL);            // The text cannot be edited
             new_horiz_layout.addView(new_text_view);
                      
             CheckBox new_checkbox = new CheckBox(this);

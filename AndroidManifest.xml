@@ -45,10 +45,44 @@
         <activity
             android:name="fr.neuf.perso.pdejoue.kart_match.PilotsCarsValidateActivity"
             android:label="@string/title_activity_pilots_cars_validate"
-            android:parentActivityName="fr.neuf.perso.pdejoue.kart_match.CarsSelectionActivity" >
+            android:parentActivityName="fr.neuf.perso.pdejoue.kart_match.CarsSelectionActivity"
+            android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="fr.neuf.perso.pdejoue.kart_match.CarsSelectionActivity" />
+        </activity>
+        <activity
+            android:name="fr.neuf.perso.pdejoue.kart_match.RaceHistoryActivity"
+            android:label="@string/title_activity_race_history"
+            android:parentActivityName="fr.neuf.perso.pdejoue.kart_match.PilotsCarsValidateActivity"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="fr.neuf.perso.pdejoue.kart_match.PilotsCarsValidateActivity" />
+        </activity>
+        <activity
+            android:name="fr.neuf.perso.pdejoue.kart_match.RaceHistorySingleViewActivity"
+            android:label="@string/title_activity_race_history_single_view"
+            android:parentActivityName="fr.neuf.perso.pdejoue.kart_match.RaceHistoryActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="fr.neuf.perso.pdejoue.kart_match.RaceHistoryActivity" />
+        </activity>
+        <activity
+            android:name="fr.neuf.perso.pdejoue.kart_match.NewRaceAllGroupsActivity"
+            android:label="@string/title_activity_new_race_all_groups"
+            android:parentActivityName="fr.neuf.perso.pdejoue.kart_match.RaceHistoryActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="fr.neuf.perso.pdejoue.kart_match.RaceHistoryActivity" />
+        </activity>
+        <activity
+            android:name="fr.neuf.perso.pdejoue.kart_match.NewRaceFinalActivity"
+            android:label="@string/title_activity_new_race_final"
+            android:parentActivityName="fr.neuf.perso.pdejoue.kart_match.NewRaceAllGroupsActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="fr.neuf.perso.pdejoue.kart_match.NewRaceAllGroupsActivity" />
         </activity>
     </application>
 

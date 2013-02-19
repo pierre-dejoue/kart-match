@@ -35,7 +35,12 @@ public class PilotNamesActivity extends Activity
     public static final int VIEW_ID_BUTTON   = 42;
     
     private CustomApplication main_application = null;
-    
+ 
+    //
+    // Listeners
+    //
+
+    // Listener for the delete button next to the pilot name
     private View.OnClickListener pilot_name_delete_handler = new View.OnClickListener() 
     {
         public void onClick(View v) 
@@ -51,8 +56,8 @@ public class PilotNamesActivity extends Activity
             rebuild_scroll_view();            
         }
     };   
-    
-    
+        
+    // Listener for the pilot name's EditView
     private View.OnFocusChangeListener pilot_name_edition_handler = new View.OnFocusChangeListener()
     {
         @Override
@@ -88,7 +93,11 @@ public class PilotNamesActivity extends Activity
             }           
         }
     };
-    
+  
+    //
+    // Overridden methods
+    //
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
