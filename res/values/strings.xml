@@ -3,19 +3,19 @@
 
     <string name="app_name">KartMatch</string>
     <string name="action_settings">Settings</string>
-    <string name="kart_match_intro">Entrez le nombre de pilotes et de karts:</string>
-    <string name="pilot_names">Vous pouvez éditer le nom des pilotes:</string>
-    <string name="pilot_groups">Vous pouvez modifier la composition des groupes:</string>
-    <string name="cars_selection">Sélectionnez les voitures effectivement disponibles:</string>
+    <string name="kart_match_intro">Entrez le nombre de pilotes et de karts :</string>
+    <string name="pilot_names">Vous pouvez éditer le nom des pilotes :</string>
+    <string name="pilot_groups">Vous pouvez modifier la composition des groupes :</string>
+    <string name="cars_selection">Sélectionnez les voitures effectivement disponibles :</string>
     <string name="ok_button">Valider</string>
     <string name="confirm_button">Confirmer</string>
     <string name="new_race_button">Nouvelle course</string>
     <string name="del_last_race_button">Effacer dernière course</string>
     <string name="nb_of_groups">Nombre de groupes</string>
-    <string name="history_introduction">Courses actuellement enregistrées dans l\'historique:</string>
-    <string name="empty_history">Il n\'y a pour l\'instant aucune course dans l\'historique, pressez le bouto\"Nouvelle course\" ci-dessous.</string>
-    <string name="race_view_introduction">Détail de la course x:</string>
-    <string name="new_race_intro">Nouvelle course:</string>
+    <string name="history_introduction">Courses actuellement enregistrées dans l\'historique :</string>
+    <string name="empty_history">Il n\'y a pour l\'instant aucune course dans l\'historique, pressez le bouton \"Nouvelle course\" ci-dessous !</string>
+    <string name="race_view_introduction">Détail de la course N :</string>
+    <string name="new_race_intro">Nouvelle course :</string>
     <string name="title_activity_pilot_names">Noms des pilotes</string>
     <string name="title_activity_cars_selection">Sélection des voitures</string>
     <string name="title_activity_pilots_cars_validate">Ecran de confirmation</string>
