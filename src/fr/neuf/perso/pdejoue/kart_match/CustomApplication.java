@@ -17,11 +17,14 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
+import java.util.HashMap;
 
+import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
+import android.util.SparseIntArray;
 
+@SuppressLint("UseSparseArrays")
 public class CustomApplication extends Application  
 {
     private final static String PILOTS_FILE = "pilotes.txt";
@@ -37,9 +40,9 @@ public class CustomApplication extends Application
     public  int max_nb_of_cars    = 0;      // Set by StartActivity.java
     private int nb_of_groups      = 0;      // Set by PilotsCarsValidateActivity.java
     
-    private ArrayList<RaceDetails>        race_history         = null;
-    private ArrayList<HashSet<Integer>>   pilot_preferred_cars = null;              // pilot_preferred_cars[pilot_index] = set of car numbers 
-                                                                                    // Car indexes goes from 0 to (getActualNbOfCars()-1)
+    private ArrayList<RaceDetails>                race_history         = null;
+    private HashMap<Integer, ArrayList<Integer>>  pilot_preferred_cars = null;      // Bipartite graph that associates each pilot with its preferred cars
+                                                                                    // Cars are described by thei car number
 
     public int getActualNbOfCars()
     {
@@ -56,7 +59,7 @@ public class CustomApplication extends Application
         // Data structure inits
         //
         race_history         = new ArrayList<RaceDetails>();
-        pilot_preferred_cars = new ArrayList<HashSet<Integer>>();
+        pilot_preferred_cars = new HashMap<Integer, ArrayList<Integer>>();
         
         //
         // Initial read of file PILOTS_FILE, if the file does not exist is is created
@@ -400,22 +403,73 @@ public class CustomApplication extends Application
         
         for(int pilot_index = 0; pilot_index < nb_of_pilots; pilot_index++)
         {
-            HashSet<Integer> new_car_set = new HashSet<Integer>();
-            pilot_preferred_cars.add(new_car_set);
+            ArrayList<Integer> new_car_set = new ArrayList<Integer>();
+            pilot_preferred_cars.put(pilot_index, new_car_set);
             for(int car_index = 0; car_index < getActualNbOfCars(); car_index++)
             {
-                new_car_set.add(car_index);
+                new_car_set.add(car_numbers.get(car_index));
             }          
         }       
     }
     
-    public void save_in_race_history(int group_nb, int race_nb)
+    public void save_in_race_history(int group_nb, int race_nb, HopcroftKarp.Result random_matching)
     {
         RaceDetails rd = new RaceDetails();
         
-        rd.group_nb = group_nb;
-        rd.race_nb  = race_nb;
+        rd.group_nb             = group_nb;
+        rd.race_nb              = race_nb;
+        rd.pilot_to_car_mapping = random_matching.clone();
         
         race_history.add(rd);
+    }
+    
+    public RaceDetails get_race_history(int index)
+    {
+        return race_history.get(index);
+    }
+    
+    // Build a subgraph of a bipartite graph (U,V,E), yet not doing a hard-copy of the inner lists.
+    public HashMap<Integer, ArrayList<Integer>> get_subgraph(HashMap<Integer, ArrayList<Integer>> graph, ArrayList<Integer> subset_u)
+    {
+        HashMap<Integer, ArrayList<Integer>> subgraph = new HashMap<Integer, ArrayList<Integer>>();
+       
+        for(Integer u :  subset_u)
+        {
+            if(graph.containsKey(u))
+            {
+                subgraph.put(u, graph.get(u));
+            }
+        }
+        
+        return subgraph;
+    }
+    
+    public HopcroftKarp.Result generate_random_pilot_to_car_mapping(int group_nb)
+    {
+        ArrayList<Integer> pilot_subset = new ArrayList<Integer>();
+        
+        for(int index = 0; index < nb_of_pilots; index++)
+        {
+            if(pilot_group.get(index) == group_nb)
+            {
+                pilot_subset.add(index);
+            }
+        }
+        
+        HashMap<Integer, ArrayList<Integer>> subgraph = get_subgraph(pilot_preferred_cars, pilot_subset);
+        
+        return HopcroftKarp.findMaximumMatching(subgraph, car_numbers, true);
+    }
+    
+    public void update_pilot_preferred_cars(SparseIntArray used_cars)
+    {
+        for(int idx = 0; idx < used_cars.size(); idx++)
+        {
+            int pilot_index = used_cars.keyAt(idx);
+            int car_number  = used_cars.valueAt(idx);
+            
+            ArrayList<Integer> car_list = pilot_preferred_cars.get(pilot_index);
+            car_list.remove(car_list.indexOf(car_number));
+        }
     }
 }

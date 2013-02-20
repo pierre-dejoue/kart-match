@@ -9,22 +9,20 @@
  */
 package fr.neuf.perso.pdejoue.kart_match;
 
-import android.util.SparseIntArray;
-
 public class RaceDetails 
 {
     public int group_nb;        // Starts at 1
     public int race_nb;         // Starts at 1, this is the race number in group 'group_nb'
     
-    public SparseIntArray car_used_by_pilot = new SparseIntArray(); 
+    HopcroftKarp.Result pilot_to_car_mapping = null; 
     
     public int getNbOfPilots()
     {
-        return car_used_by_pilot.size();
+        return (pilot_to_car_mapping.matching.size() + pilot_to_car_mapping.unmatched.size());
     }
     
     public boolean isTherePilot(int pilot_id)
     {
-        return (car_used_by_pilot.indexOfKey(pilot_id) >= 0);
+        return (pilot_to_car_mapping.matching.indexOfKey(pilot_id) >= 0  || pilot_to_car_mapping.unmatched.indexOfKey(pilot_id) >= 0);
     }
 }

@@ -23,14 +23,15 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 
 public class NewRaceFinalActivity extends Activity 
 {
     private CustomApplication main_application = null;   
     private int               group_nb         = 0;         // The group number for that Activity (group number starts at 1, so 0 is invalid)
+    
+    HopcroftKarp.Result random_matching;
+    
     //
     // Overridden methods
     //
@@ -102,7 +103,9 @@ public class NewRaceFinalActivity extends Activity
         LinearLayout pilot_list = (LinearLayout)findViewById(R.id.pilot_list);
         pilot_list.removeAllViews();
        
-        int car_index = 1;
+        // Generate a random matching of pilots and cars
+        random_matching = main_application.generate_random_pilot_to_car_mapping(group_nb);
+        
         for(int index = 0; index < main_application.nb_of_pilots; index++)
         {
             if(main_application.pilot_group.get(index) == group_nb)
@@ -122,7 +125,17 @@ public class NewRaceFinalActivity extends Activity
                 new_horiz_layout.addView(new_image_view);
                 
                 EditText new_text_view_car_id = new EditText(this);
-                new_text_view_car_id.setText(Integer.toString(car_index++));        // Dummy car index for now
+                if(random_matching.matching.indexOfKey(index) >= 0)
+                {
+                    new_text_view_car_id.setText(Integer.toString(random_matching.matching.get(index)));
+                }
+                else
+                {
+                    // This pilot wasn't in the maximum matching, he therefore is assigned to a car number he already got
+                    // Signal that by writing the car number red.
+                    new_text_view_car_id.setText(Integer.toString(random_matching.unmatched.get(index)));
+                    new_text_view_car_id.setTextColor(getResources().getColor(R.color.dark_red));
+                }
                 new_text_view_car_id.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
                 new_text_view_car_id.setInputType(InputType.TYPE_NULL);             // The text cannot be edited
                 new_horiz_layout.addView(new_text_view_car_id);
@@ -138,7 +151,10 @@ public class NewRaceFinalActivity extends Activity
     public void addRaceToHistory(View v)
     {   
         // Add the current race to the history
-        main_application.save_in_race_history(group_nb, main_application.getNextRaceNb(group_nb));
+        main_application.save_in_race_history(group_nb, main_application.getNextRaceNb(group_nb), random_matching);
+        
+        // Update the bipartite graph (pilots, cars)
+        main_application.update_pilot_preferred_cars(random_matching.matching);
         
         // Go back to the History Activity, clearing the two "NewRace" activities
         Intent intent = new Intent(this, RaceHistoryActivity.class);

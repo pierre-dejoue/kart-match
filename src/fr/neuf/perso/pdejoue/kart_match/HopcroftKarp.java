@@ -18,7 +18,7 @@
  *   Input:
  *      - The input graph (U, V, E) is described as an HashMap<Integer, ArrayList<Integer>>, mapping each 
  *        vertex in U to a list of vertices in V. All vertexes are Integers, and a non-connected vertex
- *        from U must be associated with the empty list. 
+ *        from U must be associated with the empty list. Sets U and V can be of different sizes.
  *      - The set V, as an ArrayList<Integer>. (Only used to compute the unmatched output).
  *      - A boolean is also passed as an argument to specify whether the output should be random or not.
  *      
@@ -26,8 +26,8 @@
  *      - A boolean, true if the matching was perfect, false otherwise
  *      - A maximum matching for that graph, returned as a SparseIntArray, mapping a subset of U to a
  *        subset of V.
- *      - A (possibly random) mapping of the remaining, unmatched, vertices of U to the remaining
- *        vertices of V. This mapping is of course disjoint from the edges of the graph. 
+ *      - A mapping of the remaining, unmatched, vertices of U to the remaining vertices of V.
+ *        This mapping is of course disjoint from the edges of the graph. 
  *   
  *
  * Copyright (C) 2013, Pierre DEJOUE
@@ -39,7 +39,6 @@ package fr.neuf.perso.pdejoue.kart_match;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 
 import android.annotation.SuppressLint;
 import android.util.Log;
@@ -53,6 +52,17 @@ public class HopcroftKarp
         public boolean         perfect_matching;
         public SparseIntArray  matching   = new SparseIntArray();
         public SparseIntArray  unmatched  = new SparseIntArray();
+        
+        public Result clone()
+        {
+            Result copy = new Result();
+            
+            copy.perfect_matching = perfect_matching;
+            copy.matching         = matching.clone();
+            copy.unmatched        = unmatched.clone();
+            
+            return copy;
+        }
     };
     
     // Utility function used to manipulate hash map of type HashMap<Integer, ArrayList<Integer>>
@@ -81,7 +91,10 @@ public class HopcroftKarp
         HashMap<Integer, Integer>            all_layers_u        = new HashMap<Integer, Integer>();                 // Union of all layers U, except k = 0
         HashMap<Integer, ArrayList<Integer>> all_layers_v        = new HashMap<Integer, ArrayList<Integer>>();
         HashMap<Integer, Integer>            matched_v           = new HashMap<Integer, Integer>();
-        HashSet<Integer>                     unmatched_v         = new HashSet<Integer>();
+        ArrayList<Integer>                   unmatched_v         = new ArrayList<Integer>();
+        
+        //Log.d("HopcroftKarp.Algo", "graph: " +          graph.toString());
+        //Log.d("HopcroftKarp.Algo", "in_vertices_v: " +  in_vertices_v.toString());
         
         // Loop an finding a minimal augmenting path
         while(true)
@@ -156,6 +169,11 @@ public class HopcroftKarp
             // After the inner while loop has completed, either we found at least one augmenting path...
             if(!unmatched_v.isEmpty())
             {
+                if(randomize)
+                {
+                    Collections.shuffle(unmatched_v);       // Important to randomize the list here
+                                                            // especially in the case where |V| > |U|
+                }
                 for(Integer v : unmatched_v)
                 {
                     // Use DFS to find one augmenting path ending with vertex V. The vertices from that path, if it 
@@ -190,7 +208,8 @@ public class HopcroftKarp
     
     // Recursive function used to build an augmenting path starting from the end node v. 
     // Uses DFS on the U and V layers built during the first phase of the algorithm.
-    // This is by the way this function which is responsible for randomizing the output.
+    // This is by the way this function which is responsible for most of the 
+    // randomization of the output.
     // Returns true if an augmenting path was found.
     private static boolean recFindAugmentingPath(Integer v, 
                                                  HashMap<Integer, Integer>            all_layers_u, 

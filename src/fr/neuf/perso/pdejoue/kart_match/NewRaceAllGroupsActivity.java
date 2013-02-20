@@ -9,8 +9,6 @@
  */
 package fr.neuf.perso.pdejoue.kart_match;
 
-import java.io.FileNotFoundException;
-
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;

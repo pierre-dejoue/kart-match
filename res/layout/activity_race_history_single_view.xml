@@ -13,6 +13,20 @@
         android:id="@+id/race_view_introduction"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="@string/race_view_introduction" />
+    
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"  
+        android:layout_weight="1"   
+    >
+		<LinearLayout 
+		    android:id="@+id/pilot_list"
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:orientation="vertical"
+		/>        
+    </ScrollView>
 
 </LinearLayout>
