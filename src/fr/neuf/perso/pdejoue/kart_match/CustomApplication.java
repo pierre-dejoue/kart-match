@@ -27,7 +27,10 @@ public class CustomApplication extends Application
     private final static String PILOTS_FILE = "pilotes.txt";
     
     private ArrayList<String>  pilot_names = new  ArrayList<String>();              // Image of the internal save file PILOTS_FILE 
-    public  ArrayList<Integer> car_numbers = new  ArrayList<Integer>();             // Associates the car index with the actual car number
+    
+    public  ArrayList<Integer> car_numbers = new  ArrayList<Integer>();             // Associates the car index with the actual car number, i.e. the set
+                                                                                    // V of the bipartite graph passed to the Hopcroft-Karp algorithm.
+    
     public  ArrayList<Integer> pilot_group = new  ArrayList<Integer>();             // Associates a pilot to its group. Group number starts at 1
     
     public  int nb_of_pilots      = 0;      // Set by StartActivity.java
@@ -35,7 +38,7 @@ public class CustomApplication extends Application
     private int nb_of_groups      = 0;      // Set by PilotsCarsValidateActivity.java
     
     private ArrayList<RaceDetails>        race_history         = null;
-    private ArrayList<HashSet<Integer>>   pilot_preferred_cars = null;              // pilot_preferred_cars[pilot_index] = set of car indexes 
+    private ArrayList<HashSet<Integer>>   pilot_preferred_cars = null;              // pilot_preferred_cars[pilot_index] = set of car numbers 
                                                                                     // Car indexes goes from 0 to (getActualNbOfCars()-1)
 
     public int getActualNbOfCars()

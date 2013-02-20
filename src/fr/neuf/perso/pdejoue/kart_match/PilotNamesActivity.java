@@ -109,10 +109,16 @@ public class PilotNamesActivity extends Activity
         
         // Edit introduction text
         TextView text1 = (TextView)findViewById(R.id.text1);        
-        text1.setText("Vous avez demandé " + Integer.toString(main_application.nb_of_pilots) + " pilotes.\nVous pouvez éditer leurs noms (ou pas):");
+        text1.setText("Vous avez demandé " + Integer.toString(main_application.nb_of_pilots) + " pilotes.\nVous pouvez éditer leurs noms (ou pas) :");
         
         // List of pilot names:
         rebuild_scroll_view();
+        
+        // DEBUG
+        HopcroftKarp.Test1();
+        HopcroftKarp.Test2();
+                
+        
     }
 
     /**
