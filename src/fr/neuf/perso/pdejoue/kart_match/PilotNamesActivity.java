@@ -118,8 +118,8 @@ public class PilotNamesActivity extends Activity
         HopcroftKarp.Test1();
         HopcroftKarp.Test2();
         HopcroftKarp.Test3();
-                
-        
+        HopcroftKarp.Test4();
+        HopcroftKarp.Test5();
     }
 
     /**

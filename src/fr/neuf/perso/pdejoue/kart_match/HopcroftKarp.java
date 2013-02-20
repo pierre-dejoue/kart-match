@@ -3,9 +3,8 @@
  *
  *   Implementation of the Hopcroft-Karp algorithm to find a maximum matching on a bipartite graph.
  *   
- *   This implementation has the option to randomize the order of the edges in the input graph so 
- *   that the returned matching is also random. (I.e. selected randomly among all the possible
- *   solutions for the maximum matching problem).
+ *   This implementation has the option to randomize the output matching (i.e. it is selected
+ *   randomly among all the possible solutions to the maximum matching problem).
  *   
  *   Useful information regarding the Hopcroft-Karp algorithm can be found there:
  *      - http://en.wikipedia.org/wiki/Matching_(graph_theory)#Maximum_matchings_in_bipartite_graphs
@@ -163,7 +162,7 @@ public class HopcroftKarp
                     // exists, are removed from the all_layers_u and all_layers_v maps.
                     if(k >= 1)
                     { 
-                        recFindAugmentingPath(v, all_layers_u, all_layers_v, matched_v, k-1);       // Ignore return status
+                        recFindAugmentingPath(v, all_layers_u, all_layers_v, matched_v, randomize, (k-1));       // Ignore return status
                     }
                     else
                     {
@@ -190,24 +189,34 @@ public class HopcroftKarp
     }
     
     // Recursive function used to build an augmenting path starting from the end node v. 
-    // Uses DFS on the U and V layers built during the first phase of the algorithm. 
-    // Returns true if an augmenting path was found 
+    // Uses DFS on the U and V layers built during the first phase of the algorithm.
+    // This is by the way this function which is responsible for randomizing the output.
+    // Returns true if an augmenting path was found.
     private static boolean recFindAugmentingPath(Integer v, 
                                                  HashMap<Integer, Integer>            all_layers_u, 
                                                  HashMap<Integer, ArrayList<Integer>> all_layers_v,
                                                  HashMap<Integer, Integer>            matched_v, 
+                                                 boolean randomize,
                                                  int k)
     {
         if(all_layers_v.containsKey(v))
         {
-            for(Integer u: all_layers_v.get(v))
+            ArrayList<Integer> list_u = all_layers_v.get(v);
+            
+            // If random output is requested
+            if(randomize)
+            {
+                Collections.shuffle(list_u);
+            }
+            
+            for(Integer u: list_u)
             {
                 if(all_layers_u.containsKey(u))
                 {
                     Integer prev_v = all_layers_u.get(u);
                     
                     // If the path ending with "prev_v -> u -> v" is an augmenting path
-                    if(k == 0 || recFindAugmentingPath(prev_v, all_layers_u, all_layers_v, matched_v, k-1))
+                    if(k == 0 || recFindAugmentingPath(prev_v, all_layers_u, all_layers_v, matched_v, randomize, (k-1)))
                     {
                         matched_v.put(v, u);                        // Edge u -> v replaces the previous matched edge connected to v.
                         all_layers_v.remove(v);                     // Remove vertex v from all_layers_v
@@ -288,7 +297,7 @@ public class HopcroftKarp
                                     boolean                              randomize)
     {       
 
-        Log.d("HopcroftKarp.Test", graph.toString());
+        Log.d("HopcroftKarp.Test", "graph: " + graph.toString());
         
         Result result = findMaximumMatching(graph, in_vertices_v, randomize);
         
@@ -343,11 +352,15 @@ public class HopcroftKarp
         test_graph.get(0).add(1);
         test_graph.get(0).add(4);
         test_graph.get(1).add(2);
-        test_graph.get(2).add(3);
-        test_graph.get(3).add(1);
-        test_graph.get(4).add(0);
+        test_graph.get(1).add(3);
+        test_graph.get(2).add(0);
+        test_graph.get(2).add(4);
+        test_graph.get(3).add(3);
+        test_graph.get(3).add(4);
+        test_graph.get(4).add(3);
+        test_graph.get(4).add(4);
         
-        GenericTest(test_graph, array_v, false);
+        GenericTest(test_graph, array_v, true);
     }
 
     public static void Test3()
@@ -370,4 +383,74 @@ public class HopcroftKarp
         GenericTest(test_graph, array_v, true);
     }
     
+    public static void Test4()
+    {
+        HashMap<Integer, ArrayList<Integer>> test_graph = new HashMap<Integer, ArrayList<Integer>>();
+        ArrayList<Integer>                   array_v    = new ArrayList<Integer>();
+        
+        for(int idx = 0; idx < 5; idx++)
+        {
+            array_v.add(idx);
+            test_graph.put(idx, new ArrayList<Integer>());
+        }
+        for(int idx = 0; idx < 5; idx++)
+        {
+            test_graph.get(0).add(idx);
+            test_graph.get(4).add(idx);
+        }
+        test_graph.get(1).add(2);
+        test_graph.get(2).add(3);
+        test_graph.get(3).add(1);
+
+        GenericTest(test_graph, array_v, true);
+    }
+    
+    public static void Test5()
+    {
+        HashMap<Integer, ArrayList<Integer>> test_graph = new HashMap<Integer, ArrayList<Integer>>();
+        ArrayList<Integer>                   array_v    = new ArrayList<Integer>();
+        
+        for(int idx = 0; idx < 9; idx++)
+        {
+            array_v.add(idx);
+            test_graph.put(idx, new ArrayList<Integer>());
+        }
+        
+        // The following 3 subgraphs can only be matched in a unique way
+        test_graph.get(0).add(1);
+        test_graph.get(1).add(0);
+        
+        test_graph.get(2).add(3);
+        test_graph.get(3).add(4);
+        test_graph.get(4).add(2);
+        
+        test_graph.get(5).add(6);
+        test_graph.get(6).add(7);
+        test_graph.get(7).add(8);
+        test_graph.get(8).add(5);
+        
+        // Add some parasite edges linking those subgraphs together to make the task harder for the algorithm
+        // The perfect matching solution for the whole graph is still unique
+        test_graph.get(2).add(0);
+        test_graph.get(3).add(0);
+        test_graph.get(4).add(0);       
+        test_graph.get(2).add(1);
+        test_graph.get(3).add(1);
+        test_graph.get(4).add(1);
+        
+        test_graph.get(5).add(2);
+        test_graph.get(6).add(2);
+        test_graph.get(7).add(2);
+        test_graph.get(8).add(2);
+        test_graph.get(5).add(3);
+        test_graph.get(6).add(3);
+        test_graph.get(7).add(3);
+        test_graph.get(8).add(3);
+        test_graph.get(5).add(4);
+        test_graph.get(6).add(4);
+        test_graph.get(7).add(4);
+        test_graph.get(8).add(4);
+        
+        GenericTest(test_graph, array_v, true);
+    }
 }
