@@ -205,6 +205,9 @@ public class PilotNamesActivity extends Activity
         // Launch next activity
         Intent intent = new Intent(this, CarsSelectionActivity.class);
         startActivity(intent);
+        
+        // Do not keep this Activity in memory
+        finish();
     }
 
 }

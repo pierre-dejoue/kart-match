@@ -53,13 +53,24 @@ public class HopcroftKarp
         public SparseIntArray  matching   = new SparseIntArray();
         public SparseIntArray  unmatched  = new SparseIntArray();
         
+        // Strangely enough, the SparseIntArray.clone() method was not supported on API 7 (Motorola Milestone)
+        private static SparseIntArray clone(SparseIntArray arr)
+        {
+            SparseIntArray out = new SparseIntArray();
+            for(int idx = 0; idx < arr.size(); idx++)
+            {
+                out.put(arr.keyAt(idx), arr.valueAt(idx));
+            }
+            return out;
+        }
+        
         public Result clone()
         {
             Result copy = new Result();
             
             copy.perfect_matching = perfect_matching;
-            copy.matching         = matching.clone();
-            copy.unmatched        = unmatched.clone();
+            copy.matching         = clone(matching);
+            copy.unmatched        = clone(unmatched);
             
             return copy;
         }

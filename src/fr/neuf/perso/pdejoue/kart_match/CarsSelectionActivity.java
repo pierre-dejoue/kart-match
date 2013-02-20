@@ -67,9 +67,6 @@ public class CarsSelectionActivity extends Activity
         setContentView(R.layout.activity_cars_selection);
         main_application = (CustomApplication)getApplication();
         
-        // Initialize car numbers
-        main_application.initCarNumbers();
-        
         // Setup action bar.
         setupActionBar();
         
@@ -185,6 +182,9 @@ public class CarsSelectionActivity extends Activity
         {
             Intent intent = new Intent(this, PilotsCarsValidateActivity.class);
             startActivity(intent);
+            
+            // Do not keep this Activity in memory
+            finish();
         }
     }
 

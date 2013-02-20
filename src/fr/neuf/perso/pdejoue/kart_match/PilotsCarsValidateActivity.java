@@ -96,6 +96,9 @@ public class PilotsCarsValidateActivity extends Activity
         // Launch next activity if actual number of cars is different from zero
         Intent intent = new Intent(this, RaceHistoryActivity.class);
         startActivity(intent);
+        
+        // Do not keep this Activity in memory
+        finish();
     }
 
 }

@@ -16,6 +16,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.text.InputType;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -138,6 +139,8 @@ public class NewRaceFinalActivity extends Activity
                 }
                 new_text_view_car_id.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
                 new_text_view_car_id.setInputType(InputType.TYPE_NULL);             // The text cannot be edited
+                new_text_view_car_id.setEms(3);
+                new_text_view_car_id.setGravity(Gravity.RIGHT);
                 new_horiz_layout.addView(new_text_view_car_id);
                             
                 pilot_list.addView(new_horiz_layout);
