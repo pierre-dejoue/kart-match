@@ -49,6 +49,13 @@ import android.util.SparseIntArray;
 @SuppressLint("UseSparseArrays")
 public class HopcroftKarp 
 {
+    public static class Result
+    {
+        public boolean         perfect_matching;
+        public SparseIntArray  matching   = new SparseIntArray();
+        public SparseIntArray  unmatched  = new SparseIntArray();
+    };
+    
     // Utility function used to manipulate hash map of type HashMap<Integer, ArrayList<Integer>>
     private static ArrayList<Integer> getValueOrDefault(HashMap<Integer, ArrayList<Integer>> map, Integer key)
     {
@@ -62,44 +69,10 @@ public class HopcroftKarp
         return map.get(key);
     }
     
-    // Recursive function used to build an augmenting path starting from the end node v. 
-    // Uses DFS on the U and V layers built during the first phase of the algorithm. 
-    // Returns true if an augmenting path was found 
-    private static boolean recFindAugmentingPath(Integer v, 
-                                                 HashMap<Integer, Integer>            union_all_layers_u, 
-                                                 HashMap<Integer, ArrayList<Integer>> union_all_layers_v,
-                                                 HashMap<Integer, Integer> matched_v, 
-                                                 int k)
-    {
-        if(union_all_layers_v.containsKey(v))
-        {
-            for(Integer u: union_all_layers_v.get(v))
-            {
-                if(union_all_layers_u.containsKey(u))
-                {
-                    Integer prev_v = union_all_layers_u.get(u);
-                    
-                    // If the path ending with "prev_v -> u -> v" is an augmenting path
-                    if(k == 0 || recFindAugmentingPath(prev_v, union_all_layers_u, union_all_layers_v, matched_v, k-1))
-                    {
-                        matched_v.put(v, u);                            // Edge u -> v replaces the previous matched edge connected to v.
-                        union_all_layers_v.remove(v);                   // Remove vertex v from union_all_layers_v
-                        union_all_layers_u.remove(u);                   // Remove vertex u from union_all_layers_u
-                        return true;
-                    }
-                }
-            }
-        }
-        
-        return false;   // No augmenting path found
-    }
-    
     // The Hopcroft-Karp algorithm
-    public  static boolean findMaximumMatching(HashMap<Integer, ArrayList<Integer>> in_graph, 
-                                               ArrayList<Integer> in_vertices_v, 
-                                               boolean randomize, 
-                                               SparseIntArray out_matching, 
-                                               SparseIntArray out_unmatched)
+    public  static Result findMaximumMatching(HashMap<Integer, ArrayList<Integer>> graph, 
+                                              ArrayList<Integer>                   in_vertices_v, 
+                                              boolean                              randomize)
     {
         // Local variables:
         //
@@ -111,11 +84,6 @@ public class HopcroftKarp
         HashMap<Integer, Integer>            matched_v           = new HashMap<Integer, Integer>();
         HashSet<Integer>                     unmatched_v         = new HashSet<Integer>();
         
-        // Clear output arrays
-        out_matching.clear();
-        out_unmatched.clear();
-        
-        
         // Loop an finding a minimal augmenting path
         while(true)
         {
@@ -124,7 +92,7 @@ public class HopcroftKarp
             // The initial layer of vertices of U is equal to the set of u not in the current matching
             union_all_layers_u.clear();
             current_layer_u.clear();
-            for(Integer u : in_graph.keySet())
+            for(Integer u : graph.keySet())
             {
                 if(!matched_v.containsValue(u))
                 {
@@ -147,7 +115,7 @@ public class HopcroftKarp
                 current_layer_v.clear();
                 for(Integer u : current_layer_u.keySet())
                 {
-                    for(Integer v : in_graph.get(u))
+                    for(Integer v : graph.get(u))
                     {
                         if(!union_all_layers_v.containsKey(v))     // If not already in the previous partitions for V
                         {
@@ -203,85 +171,133 @@ public class HopcroftKarp
             }
         } // end while(true)
         
-        // Construct output SparseIntArray out_matching: this is basically the reverse map of map matched_v
-        for(Integer v: matched_v.keySet())
-        {
-            Integer u = matched_v.get(v);
-            out_matching.put(u, v);
-        }
         
-        if(in_graph.size() == in_vertices_v.size() && in_graph.size() == out_matching.size())
-        {
-            // Perfect matching
-            return true;
-        }
-        else
-        {        
-            // Construct output out_unmatched
-            
-            // Get all the unmatched vertices from V. Shuffle them if required
-            ArrayList<Integer> remaining_v = new ArrayList<Integer>();
-            for(Integer v : in_vertices_v)
-            {
-                if(!matched_v.containsKey(v))
-                {
-                    remaining_v.add(v);
-                }
-            }
-            if(randomize)
-            {
-                Collections.shuffle(remaining_v);
-            }
-            
-            // Associates the unmatched vertices from U with the remaining ones from V until one of those two sets is exhausted
-            for(Integer u: in_graph.keySet())
-            {
-                if(out_matching.indexOfKey(u) < 0)      // If u is not a matched vertex
-                {
-                    if(!remaining_v.isEmpty())
-                    {
-                        out_unmatched.put(u, remaining_v.get(0));
-                        remaining_v.remove(0);
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-            }
-            
-            return false;
-        }        
+        // Create output class
+        Result result = new Result();
+        
+        result.perfect_matching = (graph.size() == in_vertices_v.size() && graph.size() == matched_v.size());
+        result.matching         = get_reverse_mapping(matched_v);
+        result.unmatched        = build_unmatched_set(graph, matched_v, in_vertices_v, randomize);       
+        
+        return result;       
     }
     
+    // Recursive function used to build an augmenting path starting from the end node v. 
+    // Uses DFS on the U and V layers built during the first phase of the algorithm. 
+    // Returns true if an augmenting path was found 
+    private static boolean recFindAugmentingPath(Integer v, 
+                                                 HashMap<Integer, Integer>            union_all_layers_u, 
+                                                 HashMap<Integer, ArrayList<Integer>> union_all_layers_v,
+                                                 HashMap<Integer, Integer>            matched_v, 
+                                                 int k)
+    {
+        if(union_all_layers_v.containsKey(v))
+        {
+            for(Integer u: union_all_layers_v.get(v))
+            {
+                if(union_all_layers_u.containsKey(u))
+                {
+                    Integer prev_v = union_all_layers_u.get(u);
+                    
+                    // If the path ending with "prev_v -> u -> v" is an augmenting path
+                    if(k == 0 || recFindAugmentingPath(prev_v, union_all_layers_u, union_all_layers_v, matched_v, k-1))
+                    {
+                        matched_v.put(v, u);                            // Edge u -> v replaces the previous matched edge connected to v.
+                        union_all_layers_v.remove(v);                   // Remove vertex v from union_all_layers_v
+                        union_all_layers_u.remove(u);                   // Remove vertex u from union_all_layers_u
+                        return true;
+                    }
+                }
+            }
+        }
+        
+        return false;   // No augmenting path found
+    }
     
+    // Given an input associative array that stores (key, value) pairs, and assuming that all values are unique,
+    // the following function return the reverse mapping: (value, key) pairs.
+    public static SparseIntArray get_reverse_mapping(HashMap<Integer, Integer> input_map)
+    {
+        SparseIntArray reversed_map = new SparseIntArray(); 
+        
+        for(Integer v: input_map.keySet())
+        {
+            Integer u = input_map.get(v);
+            reversed_map.put(u, v);
+        }
+        
+        return reversed_map;
+    }
+    
+    // Associates all unmatched vertices of U with remaning vertices of from V. Shuffle the result if required
+    private static SparseIntArray build_unmatched_set(HashMap<Integer, ArrayList<Integer>> graph,
+                                                      HashMap<Integer, Integer>            matched_v,
+                                                      ArrayList<Integer>                   in_vertices_v,
+                                                      boolean                              randomize)
+    {
+        ArrayList<Integer> remaining_v  = new ArrayList<Integer>();
+        SparseIntArray     unmatched    = new SparseIntArray();     
+        
+        for(Integer v : in_vertices_v)
+        {
+            if(!matched_v.containsKey(v))
+            {
+                remaining_v.add(v);
+            }
+        }
+        
+        // Randomize if requested
+        if(randomize)
+        {
+            Collections.shuffle(remaining_v);
+        }
+        Log.d("HopcroftKarp", remaining_v.toString());
+        
+        // Associates the unmatched vertices from U with the remaining ones from V until one of those two sets is exhausted
+        for(Integer u: graph.keySet())
+        {
+            if(!matched_v.containsValue(u))      // If u is not a matched vertex
+            {
+                if(!remaining_v.isEmpty())
+                {
+                    unmatched.put(u, remaining_v.get(0));
+                    remaining_v.remove(0);
+                }
+                else
+                {
+                    break;
+                }
+            }
+        }
+        
+        return unmatched;
+    } 
     
     //
     // Test functions (DEBUG ONLY)
     //
     
-    public static void GenericTest( HashMap<Integer, ArrayList<Integer>> in_graph, 
-                                    ArrayList<Integer> in_vertices_v, 
-                                    boolean randomize)
+    public static void GenericTest( HashMap<Integer, ArrayList<Integer>> graph, 
+                                    ArrayList<Integer>                   in_vertices_v, 
+                                    boolean                              randomize)
     {       
 
-        Log.d("HopcroftKarp.Test", in_graph.toString());
+        Log.d("HopcroftKarp.Test", graph.toString());
         
-        SparseIntArray out_matching  = new SparseIntArray();
-        SparseIntArray out_unmatched = new SparseIntArray();
+        Result result = findMaximumMatching(graph, in_vertices_v, randomize);
         
-        findMaximumMatching(in_graph, in_vertices_v, false, out_matching, out_unmatched);
+        Log.d("HopcroftKarp.Test", "perfect_matching: " + result.perfect_matching);
         
         Log.d("HopcroftKarp.Test", "out_matching:");
-        for(int idx = 0; idx < out_matching.size(); idx++)
+        for(int idx = 0; idx < result.matching.size(); idx++)
         {
-            Log.d("HopcroftKarp.Test", out_matching.keyAt(idx) + " -> " + out_matching.valueAt(idx));
+            Log.d("HopcroftKarp.Test", result.matching.keyAt(idx) + " -> " + result.matching.valueAt(idx));
         }
         
         Log.d("HopcroftKarp.Test", "out_unmatched:");
-        for(int idx = 0; idx < out_unmatched.size(); idx++)
+        for(int idx = 0; idx < result.unmatched.size(); idx++)
         {
-            Log.d("HopcroftKarp.Test", out_unmatched.keyAt(idx) + " -> " + out_unmatched.valueAt(idx));
+            Log.d("HopcroftKarp.Test", result.unmatched.keyAt(idx) + " -> " + result.unmatched.valueAt(idx));
         }
     }
     
@@ -319,7 +335,7 @@ public class HopcroftKarp
         {
             test_graph.put(idx, new ArrayList<Integer>());
         }
-        //test_graph.get(0).add(1);
+        test_graph.get(0).add(1);
         test_graph.get(0).add(4);
         test_graph.get(1).add(2);
         test_graph.get(2).add(3);
