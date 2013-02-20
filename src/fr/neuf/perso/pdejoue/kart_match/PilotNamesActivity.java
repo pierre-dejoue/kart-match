@@ -113,13 +113,6 @@ public class PilotNamesActivity extends Activity
         
         // List of pilot names:
         rebuild_scroll_view();
-        
-        // DEBUG
-        HopcroftKarp.Test1();
-        HopcroftKarp.Test2();
-        HopcroftKarp.Test3();
-        HopcroftKarp.Test4();
-        HopcroftKarp.Test5();
     }
 
     /**

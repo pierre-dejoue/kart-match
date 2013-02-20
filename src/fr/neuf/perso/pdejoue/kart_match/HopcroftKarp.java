@@ -88,7 +88,7 @@ public class HopcroftKarp
         {
             int k = 0;  // U-layers have indexes n = 2*k; V-layers have indexes n = 2*k+1.
             
-            Log.d("HopcroftKarp.Algo", "matched_v: " +  matched_v.toString());
+            //Log.d("HopcroftKarp.Algo", "matched_v: " +  matched_v.toString());
             
             // The initial layer of vertices of U is equal to the set of u not in the current matching
             all_layers_u.clear();
@@ -112,7 +112,7 @@ public class HopcroftKarp
             // While the current layer U is not empty and no unmatched V was encountered
             while(!current_layer_u.isEmpty() && unmatched_v.isEmpty())
             {
-                Log.d("HopcroftKarp.Algo", "current_layer_u: " + current_layer_u.toString());
+                //Log.d("HopcroftKarp.Algo", "current_layer_u: " + current_layer_u.toString());
                 
                 // Build the layer of vertices of V with index n = 2*k+1                
                 current_layer_v.clear();
@@ -128,7 +128,7 @@ public class HopcroftKarp
                     }
                 }
                 
-                Log.d("HopcroftKarp.Algo", "current_layer_v: " + current_layer_v.toString());
+                //Log.d("HopcroftKarp.Algo", "current_layer_v: " + current_layer_v.toString());
                 
                 k++;
                 // Build the layer of vertices of U with index n = 2*k
