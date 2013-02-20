@@ -117,6 +117,7 @@ public class PilotNamesActivity extends Activity
         // DEBUG
         HopcroftKarp.Test1();
         HopcroftKarp.Test2();
+        HopcroftKarp.Test3();
                 
         
     }

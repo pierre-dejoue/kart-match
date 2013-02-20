@@ -79,8 +79,8 @@ public class HopcroftKarp
         //
         HashMap<Integer, Integer>            current_layer_u     = new HashMap<Integer, Integer>();
         HashMap<Integer, ArrayList<Integer>> current_layer_v     = new HashMap<Integer, ArrayList<Integer>>();
-        HashMap<Integer, Integer>            union_all_layers_u  = new HashMap<Integer, Integer>();                 // Union of previous layers, except k = 0
-        HashMap<Integer, ArrayList<Integer>> union_all_layers_v  = new HashMap<Integer, ArrayList<Integer>>();
+        HashMap<Integer, Integer>            all_layers_u        = new HashMap<Integer, Integer>();                 // Union of all layers U, except k = 0
+        HashMap<Integer, ArrayList<Integer>> all_layers_v        = new HashMap<Integer, ArrayList<Integer>>();
         HashMap<Integer, Integer>            matched_v           = new HashMap<Integer, Integer>();
         HashSet<Integer>                     unmatched_v         = new HashSet<Integer>();
         
@@ -89,19 +89,21 @@ public class HopcroftKarp
         {
             int k = 0;  // U-layers have indexes n = 2*k; V-layers have indexes n = 2*k+1.
             
+            Log.d("HopcroftKarp.Algo", "matched_v: " +  matched_v.toString());
+            
             // The initial layer of vertices of U is equal to the set of u not in the current matching
-            union_all_layers_u.clear();
+            all_layers_u.clear();
             current_layer_u.clear();
             for(Integer u : graph.keySet())
             {
                 if(!matched_v.containsValue(u))
                 {
                     current_layer_u.put(u, 0);
-                    union_all_layers_u.put(u, 0);
+                    all_layers_u.put(u, 0);
                 }
             }
 
-            union_all_layers_v.clear();
+            all_layers_v.clear();
             unmatched_v.clear();
 
             // Use BFS to build alternating U and V layers, in which:
@@ -111,33 +113,37 @@ public class HopcroftKarp
             // While the current layer U is not empty and no unmatched V was encountered
             while(!current_layer_u.isEmpty() && unmatched_v.isEmpty())
             {
-                // Build the layer of vertices of V with index n = 2*k+1
+                Log.d("HopcroftKarp.Algo", "current_layer_u: " + current_layer_u.toString());
+                
+                // Build the layer of vertices of V with index n = 2*k+1                
                 current_layer_v.clear();
                 for(Integer u : current_layer_u.keySet())
                 {
                     for(Integer v : graph.get(u))
                     {
-                        if(!union_all_layers_v.containsKey(v))     // If not already in the previous partitions for V
+                        if(!all_layers_v.containsKey(v))     // If not already in the previous partitions for V
                         {
                             getValueOrDefault(current_layer_v, v).add(u);
-                            // Expand of union_all_layers_v is done in the next step, building the U-layer
+                            // Expand of all_layers_v is done in the next step, building the U-layer
                         }
                     }
                 }
+                
+                Log.d("HopcroftKarp.Algo", "current_layer_v: " + current_layer_v.toString());
                 
                 k++;
                 // Build the layer of vertices of U with index n = 2*k
                 current_layer_u.clear();
                 for(Integer v : current_layer_v.keySet())
                 {
-                    union_all_layers_v.put(v, current_layer_v.get(v));  // Expand the union of all V-layers to include current_v_layer
+                    all_layers_v.put(v, current_layer_v.get(v));  // Expand the union of all V-layers to include current_v_layer
                     
                     // Is it a matched vertex in V?
                     if(matched_v.containsKey(v))
                     {
                         Integer u = matched_v.get(v);
                         current_layer_u.put(u, v);
-                        union_all_layers_u.put(u, v);                   // Expand the union of all U-layers to include current_u_layer
+                        all_layers_u.put(u, v);                   // Expand the union of all U-layers to include current_u_layer
                     }
                     else
                     {
@@ -154,18 +160,19 @@ public class HopcroftKarp
                 for(Integer v : unmatched_v)
                 {
                     // Use DFS to find one augmenting path ending with vertex V. The vertices from that path, if it 
-                    // exists, are removed from the union_all_layers_u and union_all_layers_v maps.
+                    // exists, are removed from the all_layers_u and all_layers_v maps.
                     if(k >= 1)
                     { 
-                        recFindAugmentingPath(v, union_all_layers_u, union_all_layers_v, matched_v, k-1);       // Ignore return status
+                        recFindAugmentingPath(v, all_layers_u, all_layers_v, matched_v, k-1);       // Ignore return status
                     }
                     else
                     {
                         throw new ArithmeticException("k should not be equal to zero here.");
                     }                   
                 }
-            }
+            }            
             // ... or we didn't, in which case we already got a maximum matching for that graph
+            else
             {
                  break;
             }
@@ -186,25 +193,25 @@ public class HopcroftKarp
     // Uses DFS on the U and V layers built during the first phase of the algorithm. 
     // Returns true if an augmenting path was found 
     private static boolean recFindAugmentingPath(Integer v, 
-                                                 HashMap<Integer, Integer>            union_all_layers_u, 
-                                                 HashMap<Integer, ArrayList<Integer>> union_all_layers_v,
+                                                 HashMap<Integer, Integer>            all_layers_u, 
+                                                 HashMap<Integer, ArrayList<Integer>> all_layers_v,
                                                  HashMap<Integer, Integer>            matched_v, 
                                                  int k)
     {
-        if(union_all_layers_v.containsKey(v))
+        if(all_layers_v.containsKey(v))
         {
-            for(Integer u: union_all_layers_v.get(v))
+            for(Integer u: all_layers_v.get(v))
             {
-                if(union_all_layers_u.containsKey(u))
+                if(all_layers_u.containsKey(u))
                 {
-                    Integer prev_v = union_all_layers_u.get(u);
+                    Integer prev_v = all_layers_u.get(u);
                     
                     // If the path ending with "prev_v -> u -> v" is an augmenting path
-                    if(k == 0 || recFindAugmentingPath(prev_v, union_all_layers_u, union_all_layers_v, matched_v, k-1))
+                    if(k == 0 || recFindAugmentingPath(prev_v, all_layers_u, all_layers_v, matched_v, k-1))
                     {
-                        matched_v.put(v, u);                            // Edge u -> v replaces the previous matched edge connected to v.
-                        union_all_layers_v.remove(v);                   // Remove vertex v from union_all_layers_v
-                        union_all_layers_u.remove(u);                   // Remove vertex u from union_all_layers_u
+                        matched_v.put(v, u);                        // Edge u -> v replaces the previous matched edge connected to v.
+                        all_layers_v.remove(v);                     // Remove vertex v from all_layers_v
+                        all_layers_u.remove(u);                     // Remove vertex u from all_layers_u
                         return true;
                     }
                 }
@@ -251,7 +258,6 @@ public class HopcroftKarp
         {
             Collections.shuffle(remaining_v);
         }
-        Log.d("HopcroftKarp", remaining_v.toString());
         
         // Associates the unmatched vertices from U with the remaining ones from V until one of those two sets is exhausted
         for(Integer u: graph.keySet())
@@ -304,8 +310,11 @@ public class HopcroftKarp
     public static void Test1()
     {
         HashMap<Integer, ArrayList<Integer>> test_graph = new HashMap<Integer, ArrayList<Integer>>();
+        ArrayList<Integer>                   array_v    = new ArrayList<Integer>();
+
         for(int idx = 0; idx < 5; idx++)
         {
+            array_v.add(idx);
             test_graph.put(idx, new ArrayList<Integer>());
         }
         test_graph.get(0).add(0);
@@ -317,22 +326,18 @@ public class HopcroftKarp
         test_graph.get(2).add(3);
         test_graph.get(3).add(2);
         test_graph.get(4).add(2);
-        
-        ArrayList<Integer> array_v = new ArrayList<Integer>();
-        array_v.add(0);
-        array_v.add(1);
-        array_v.add(2);
-        array_v.add(3);
-        array_v.add(4);
-        
+               
         GenericTest(test_graph, array_v, false);
     }
     
     public static void Test2()
     {
         HashMap<Integer, ArrayList<Integer>> test_graph = new HashMap<Integer, ArrayList<Integer>>();
+        ArrayList<Integer>                   array_v    = new ArrayList<Integer>();
+        
         for(int idx = 0; idx < 5; idx++)
         {
+            array_v.add(idx);
             test_graph.put(idx, new ArrayList<Integer>());
         }
         test_graph.get(0).add(1);
@@ -342,14 +347,27 @@ public class HopcroftKarp
         test_graph.get(3).add(1);
         test_graph.get(4).add(0);
         
-        ArrayList<Integer> array_v = new ArrayList<Integer>();
-        array_v.add(0);
-        array_v.add(1);
-        array_v.add(2);
-        array_v.add(3);
-        array_v.add(4);
-        
         GenericTest(test_graph, array_v, false);
+    }
+
+    public static void Test3()
+    {
+        HashMap<Integer, ArrayList<Integer>> test_graph = new HashMap<Integer, ArrayList<Integer>>();        
+        ArrayList<Integer>                   array_v    = new ArrayList<Integer>();  
+        
+        for(int idx = 0; idx < 5; idx++)
+        {
+            array_v.add(idx);
+            ArrayList<Integer> new_list = new ArrayList<Integer>();
+            test_graph.put(idx, new_list);
+            for(int j = 0; j < 5; j++)
+            {
+                new_list.add(j);
+            }
+        }
+ 
+        // Test a complete graph
+        GenericTest(test_graph, array_v, true);
     }
     
 }
