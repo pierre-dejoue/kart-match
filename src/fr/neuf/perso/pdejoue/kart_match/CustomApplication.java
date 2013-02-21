@@ -42,8 +42,8 @@ public class CustomApplication extends Application
     
     private ArrayList<RaceDetails>                race_history         = null;
     private HashMap<Integer, ArrayList<Integer>>  pilot_preferred_cars = null;      // Bipartite graph that associates each pilot with its preferred cars
-                                                                                    // Cars are described by thei car number
-
+                                                                                    // Cars are described by their car number
+    
     public int getActualNbOfCars()
     {
         return car_numbers.size();

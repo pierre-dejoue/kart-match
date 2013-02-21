@@ -9,6 +9,8 @@
  */
 package fr.neuf.perso.pdejoue.kart_match;
 
+import java.util.ArrayList;
+
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
@@ -33,6 +35,10 @@ public class NewRaceAllGroupsActivity extends Activity
 
     private CustomApplication main_application = null;    
     private int original_text_color;
+    
+    // Boolean array used to workaround a bug in this activity when the screen orientation changes.
+    private enum Tristate { INIT, SPURIOUS, DONE };
+    private ArrayList<Tristate> capture_spurious_rg_event = new ArrayList<Tristate>();
 
     //
     // Listeners
@@ -45,10 +51,33 @@ public class NewRaceAllGroupsActivity extends Activity
         {
             PilotTag pilot_tag = (PilotTag)rg.getTag();
             
-            main_application.pilot_group.set(pilot_tag.index, group_nb);        // Update the pilot_group array
+            if(capture_spurious_rg_event.get(pilot_tag.index) == Tristate.SPURIOUS)     // Ignore current event if the previous one was a spurious event (see below)
+            {
+                capture_spurious_rg_event.set(pilot_tag.index, Tristate.DONE);
+                rg.check(main_application.pilot_group.get(pilot_tag.index));            // Fix the radiogroup
+                return;
+            }
             
-            // Update the submit buttons text and color
-            edit_group_buttons_text_and_colors();
+            if(group_nb == main_application.pilot_group.get(pilot_tag.index))
+            {
+                // Spurious event: the pilot group is already equal to the group number specified by this event
+                // We noticed such events after changing the orientation of the screen. They are followed
+                // by another event that set the pilot's group to the same group as the last pilot in the list!
+                // So in case of such event, ignore the next event on the same RadioGroup, but only during the
+                // init phase of the Activity.
+         
+                if(capture_spurious_rg_event.get(pilot_tag.index) == Tristate.INIT) 
+                {
+                    capture_spurious_rg_event.set(pilot_tag.index, Tristate.SPURIOUS);
+                }
+            }
+            else
+            {
+                main_application.pilot_group.set(pilot_tag.index, group_nb);        // Update the pilot_group array
+                
+                // Update the submit buttons text and color
+                edit_group_buttons_text_and_colors();
+            }           
         }
     };
     
@@ -106,6 +135,16 @@ public class NewRaceAllGroupsActivity extends Activity
         // Update the submit buttons text and color
         edit_group_buttons_text_and_colors();
     }
+    
+    @Override
+    protected void onDestroy()
+    {        
+        super.onDestroy();
+
+        // Erase the content of the scroll view
+        LinearLayout pilot_list = (LinearLayout)findViewById(R.id.pilot_list);
+        pilot_list.removeAllViews();
+    }
 
     /**
      * Set up the {@link android.app.ActionBar}, if the API is available.
@@ -155,7 +194,7 @@ public class NewRaceAllGroupsActivity extends Activity
     {
         // Erase the content of the scroll view
         LinearLayout pilot_list = (LinearLayout)findViewById(R.id.pilot_list);
-        pilot_list.removeAllViews();
+        //pilot_list.removeAllViews();
        
         for(int index = 0; index < main_application.nb_of_pilots; index++)
         {
@@ -179,21 +218,25 @@ public class NewRaceAllGroupsActivity extends Activity
             RadioGroup rg = new RadioGroup(this);
             rg.setOrientation(RadioGroup.HORIZONTAL);
             rg.setTag((Object)pilot_tag); 
-            for(int group_idx = 0; group_idx < nb_groups; group_idx++){
+            for(int group_idx = 0; group_idx < nb_groups; group_idx++)
+            {
                 rb[group_idx] = new RadioButton(this);
                 rb[group_idx].setText("G" + Integer.toString(group_idx+1));
                 rb[group_idx].setId(group_idx+1);
-                rg.addView(rb[group_idx]);   
+                rg.addView(rb[group_idx]); 
             }
             rg.check(main_application.pilot_group.get(index));      // Check the current group
+
             rg.setOnCheckedChangeListener(radiogroup_handler);
             new_horiz_layout.addView(rg);
             
             pilot_list.addView(new_horiz_layout);
+            
+            capture_spurious_rg_event.add(Tristate.INIT);
         }
         
         // Redraw the scroll view
-        pilot_list.invalidate();
+        //pilot_list.invalidate();
     }
     
     private void edit_group_buttons_text_and_colors()
