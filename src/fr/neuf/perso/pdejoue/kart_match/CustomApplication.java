@@ -44,6 +44,9 @@ public class CustomApplication extends Application
     private HashMap<Integer, ArrayList<Integer>>  pilot_preferred_cars = null;      // Bipartite graph that associates each pilot with its preferred cars
                                                                                     // Cars are described by their car number
     
+    public HopcroftKarp.Result random_matching;            // A random matching (used only by NewRaceFinalActivity.java)
+    
+    
     public int getActualNbOfCars()
     {
         return car_numbers.size();

@@ -91,6 +91,9 @@ public class NewRaceAllGroupsActivity extends Activity
             // Block the next Activity if one group is too big (more pilot than there are cars available). 
             if(main_application.allGroupSizesOK())
             {
+                // Generate a random matching of pilots and cars for that group
+                main_application.random_matching = main_application.generate_random_pilot_to_car_mapping(group_nb);
+                
                 // Launch next activity
                 Intent intent = new Intent(getApplicationContext(), NewRaceFinalActivity.class);
                 intent.putExtra("group_nb", group_nb);
