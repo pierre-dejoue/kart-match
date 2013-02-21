@@ -17,6 +17,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
 import android.widget.EditText;
@@ -87,6 +88,28 @@ public class StartActivity extends Activity
         });
     }
     
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) 
+    {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.options_menu, menu);
+        return true;
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) 
+    {
+        // Handle item selection
+        switch (item.getItemId()) 
+        {
+            case R.id.about_menu:
+                main_application.about_dialog(this);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+    
     //
     // Class specific methods
     //
@@ -145,17 +168,7 @@ public class StartActivity extends Activity
     public void incMaxNbOfCars(View v)
     {
         validate_nb_of_cars(main_application.max_nb_of_cars + 1);
-    }
-    
-    
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) 
-    {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.start, menu);
-        return true;
-    }
+    }    
     
     public void gotoNextActivity(View v)
     {

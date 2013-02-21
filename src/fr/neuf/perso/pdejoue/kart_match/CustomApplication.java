@@ -20,9 +20,18 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.Application;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.text.SpannableString;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.util.SparseIntArray;
+import android.view.Gravity;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 @SuppressLint("UseSparseArrays")
 public class CustomApplication extends Application  
@@ -107,6 +116,35 @@ public class CustomApplication extends Application
         }
     }
     
+    public void about_dialog(Context context)
+    {
+        SpannableString str = new SpannableString(context.getText(R.string.about_message));
+        Linkify.addLinks(str, Linkify.WEB_URLS);
+        
+        TextView about_message = new TextView(context);
+        about_message.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+        about_message.setGravity(Gravity.CENTER);
+        about_message.setTextAppearance(context, android.R.attr.textAppearanceLarge);
+        about_message.setText(str);
+        about_message.setMovementMethod(LinkMovementMethod.getInstance());
+        
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(R.string.about_title);
+        builder.setCancelable(true);
+        builder.setIcon(android.R.drawable.ic_menu_info_details);
+        builder.setNeutralButton(android.R.string.ok,
+                    new DialogInterface.OnClickListener() 
+                    {
+                        public void onClick(DialogInterface dialog, int id) 
+                        {
+                            dialog.cancel();
+                        }
+                    });
+        
+        builder.setView(about_message);
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
 
     public boolean customPilotName(int index)
     {
