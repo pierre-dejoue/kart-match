@@ -12,9 +12,13 @@
     <string name="ok_button">Valider</string>
     <string name="confirm_button">Confirmer</string>
     <string name="new_race_button">Nouvelle course</string>
-    <string name="del_last_race_button">Effacer dernière course</string>
+    <string name="del_last_race_button">Effacer</string>
     <string name="nb_of_groups">Nombre de groupes</string>
     <string name="history_introduction">Courses actuellement enregistrées dans l\'historique :</string>
+    <string name="history_dialog_title">Attention</string>
+    <string name="history_dialog_message">L\'historique des courses sera intégralement effacé ! Voulez-vous continuer ?</string>
+    <string name="history_delete_dialog_title">Attention</string>
+    <string name="history_delete_dialog_message">Cela effacera définitivement cette course ! Voulez-vous continuer ?</string>
     <string name="empty_history">Il n\'y a pour l\'instant aucune course dans l\'historique, pressez le bouton \"Nouvelle course\" ci-dessous !</string>
     <string name="race_view_introduction">Détail de la course N :</string>
     <string name="new_race_intro">Nouvelle course :</string>

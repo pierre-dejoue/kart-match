@@ -410,6 +410,11 @@ public class CustomApplication extends Application
         return ret_bool;
     }
     
+    public int getRaceHistorySize()
+    {
+        return race_history.size();
+    }
+    
     public ArrayList<String> getRaceHistoryList()
     {
         ArrayList<String>   list = new ArrayList<String>();
@@ -469,6 +474,18 @@ public class CustomApplication extends Application
         return race_history.get(index);
     }
     
+    public void delete_last_race_from_history()
+    {
+        if(race_history.size() > 0)
+        {
+            RaceDetails rd = race_history.get(race_history.size()-1);
+            
+            update_pilot_preferred_cars_reverse(rd.pilot_to_car_mapping.matching);
+            
+            race_history.remove(rd);
+        }
+    }
+    
     // Build a subgraph of a bipartite graph (U,V,E), yet not doing a hard-copy of the inner lists.
     public HashMap<Integer, ArrayList<Integer>> get_subgraph(HashMap<Integer, ArrayList<Integer>> graph, ArrayList<Integer> subset_u)
     {
@@ -511,6 +528,24 @@ public class CustomApplication extends Application
             
             ArrayList<Integer> car_list = pilot_preferred_cars.get(pilot_index);
             car_list.remove(car_list.indexOf(car_number));
+        }
+    }
+    
+    // Reversed operation compared to update_pilot_preferred_cars(), used when removing a race from the history
+    public void update_pilot_preferred_cars_reverse(SparseIntArray used_cars)
+    {
+        for(int idx = 0; idx < used_cars.size(); idx++)
+        {
+            int pilot_index = used_cars.keyAt(idx);
+            int car_number  = used_cars.valueAt(idx);
+            
+            ArrayList<Integer> car_list = pilot_preferred_cars.get(pilot_index);
+            
+            // If the car is not already in the list, put it
+            if(!car_list.contains(car_number))
+            {
+                car_list.add(car_number);
+            }
         }
     }
 }
