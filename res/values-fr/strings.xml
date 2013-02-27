@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">KartMatch</string>
+    <string name="about_menu">About</string>
+    <string name="about_title">About KartMatch</string>
+    <string name="about_message">\nOpen source software available on GitHub:\nhttp://github.com/pierre-dejoue/kart-match\n</string>
+    <string name="kart_match_intro">Entrez le nombre de pilotes et de karts :</string>
+    <string name="pilot_names">Vous pouvez éditer le nom des pilotes :</string>
+    <string name="pilot_groups">Vous pouvez modifier la composition des groupes :</string>
+    <string name="cars_selection">Sélectionnez les voitures effectivement disponibles :</string>
+    <string name="ok_button">Valider</string>
+    <string name="confirm_button">Confirmer</string>
+    <string name="new_race_button">Nouvelle course</string>
+    <string name="del_pilot_button">Effacer</string>
+    <string name="del_last_race_button">Effacer</string>
+    <string name="nb_of_groups">Nombre de groupes</string>
+    <string name="pilot_names_activity_intro_1">Vous avez demandé</string>
+    <string name="pilot_names_activity_intro_2">pilotes.\nVous pouvez éditer leurs noms (ou pas) :</string>
+    <string name="final_validate_nb_of_pilots">Nombre de pilotes :</string>
+    <string name="final_validate_nb_of_cars"  >Nombre de voitures :</string>
+    <string name="final_validate_nb_of_groups">Nombre de groupes :</string>
+    <string name="history_introduction">Courses actuellement enregistrées dans l\'historique :</string>
+    <string name="history_dialog_title">Attention</string>
+    <string name="history_dialog_message">L\'historique des courses sera intégralement effacé ! Voulez-vous continuer ?</string>
+    <string name="history_delete_dialog_title">Attention</string>
+    <string name="history_delete_dialog_message">Cela effacera définitivement cette course ! Voulez-vous continuer ?</string>
+    <string name="empty_history">Il n\'y a pour l\'instant aucune course dans l\'historique, pressez le bouton \"Nouvelle course\" ci-dessous !</string>
+    <string name="race_view_introduction">Détail de la course N :</string>
+    <string name="new_race_intro">Nouvelle course :</string>
+    <string name="group_first_letter">G</string>
+    <string name="group_capitalize">Groupe</string>
+    <string name="race">course</string>
+    <string name="cars">voitures</string>
+    <string name="pilots">pilotes</string>
+    <string name="title_activity_pilot_names">Noms des pilotes</string>
+    <string name="title_activity_cars_selection">Sélection des voitures</string>
+    <string name="title_activity_pilots_cars_validate">Ecran de confirmation</string>
+    <string name="title_activity_race_history">Historique des courses</string>
+    <string name="title_activity_race_history_single_view">Détail de la course</string>
+    <string name="title_activity_new_race_all_groups">Définir les groupes</string>
+    <string name="title_activity_new_race_final">Nouvelle course</string>
+
+
+</resources>

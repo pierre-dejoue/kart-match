@@ -62,7 +62,7 @@ public class RaceHistoryActivity extends Activity
                 // For information about how to add a button to a ListView and still keep it clickable, 
                 // read this: http://android.cyrilmottier.com/?p=525
                 Button new_button = new Button(getContext());
-                new_button.setText("Effacer");
+                new_button.setText(getResources().getString(R.string.del_last_race_button));
                 new_button.setOnClickListener(last_race_delete_handler);
                 new_button.setId(DELETE_BUTTON_UNIQUE_ID);
                 last_race.addView(new_button);

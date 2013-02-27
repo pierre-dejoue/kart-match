@@ -421,7 +421,7 @@ public class CustomApplication extends Application
         
         for(RaceDetails rd : race_history)
         {
-            list.add("Groupe " + Integer.toString(rd.group_nb) + ", course " + Integer.toString(rd.race_nb));
+            list.add(getResources().getString(R.string.group_capitalize) + " " + Integer.toString(rd.group_nb) + ", " + getResources().getString(R.string.race) + " " + Integer.toString(rd.race_nb));
         }
         
         return list;

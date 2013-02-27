@@ -124,7 +124,7 @@ public class NewRaceAllGroupsActivity extends Activity
         {
             Button new_button = new Button(this);
             new_button.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-            new_button.setText("Groupe " + Integer.toString(group_nb));
+            new_button.setText(getResources().getString(R.string.group_capitalize) + " " + Integer.toString(group_nb));
             new_button.setOnClickListener(group_select_handler);
             new_button.setId(GROUP_BUTTON_BASE_ID + group_nb);
             main_layout.addView(new_button);
@@ -218,7 +218,7 @@ public class NewRaceAllGroupsActivity extends Activity
             for(int group_idx = 0; group_idx < nb_groups; group_idx++)
             {
                 rb[group_idx] = new RadioButton(this);
-                rb[group_idx].setText("G" + Integer.toString(group_idx+1));
+                rb[group_idx].setText(getResources().getString(R.string.group_first_letter) + Integer.toString(group_idx+1));
                 rb[group_idx].setId(group_idx+1);
                 rg.addView(rb[group_idx]); 
             }
@@ -241,7 +241,7 @@ public class NewRaceAllGroupsActivity extends Activity
         for(int group_nb = 1; group_nb <= main_application.getNbOfGroups(); group_nb++)
         {
             Button submit_button = (Button)findViewById(GROUP_BUTTON_BASE_ID + group_nb);           // Retrieve button view
-            submit_button.setText("Groupe " + group_nb + " (" + main_application.getGroupSize(group_nb) + " pilotes)");
+            submit_button.setText(getResources().getString(R.string.group_capitalize) + " " + group_nb + " (" + main_application.getGroupSize(group_nb) + " " + getResources().getString(R.string.pilots) + ")");
             
             // Text color is red if the group size is greater than the actual number of cars is zero. 
             // In that case access to the next Activity is blocked.

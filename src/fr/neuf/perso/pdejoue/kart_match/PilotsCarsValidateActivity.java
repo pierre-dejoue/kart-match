@@ -42,9 +42,9 @@ public class PilotsCarsValidateActivity extends Activity
         
         // Set executive summary text
         TextView summary = (TextView)findViewById(R.id.groups);
-        summary.setText("Nombre de pilotes:  " + Integer.toString(main_application.nb_of_pilots)        + "\n" + 
-                        "Nombre de voitures: " + Integer.toString(main_application.getActualNbOfCars()) + "\n" + 
-                        "Nombre de groupes:  " + Integer.toString(main_application.getNbOfGroups())              
+        summary.setText(getResources().getString(R.string.final_validate_nb_of_pilots) + " " + Integer.toString(main_application.nb_of_pilots)        + "\n" + 
+                        getResources().getString(R.string.final_validate_nb_of_cars)   + " " + Integer.toString(main_application.getActualNbOfCars()) + "\n" + 
+                        getResources().getString(R.string.final_validate_nb_of_groups) + " " + Integer.toString(main_application.getNbOfGroups())              
                        );
     }
 

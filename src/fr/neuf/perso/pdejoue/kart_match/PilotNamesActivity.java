@@ -108,7 +108,7 @@ public class PilotNamesActivity extends Activity
         
         // Edit introduction text
         TextView text1 = (TextView)findViewById(R.id.text1);        
-        text1.setText("Vous avez demandé " + Integer.toString(main_application.nb_of_pilots) + " pilotes.\nVous pouvez éditer leurs noms (ou pas) :");
+        text1.setText(getResources().getString(R.string.pilot_names_activity_intro_1) + " " + Integer.toString(main_application.nb_of_pilots) + " " + getResources().getString(R.string.pilot_names_activity_intro_2));
         
         // List of pilot names:
         rebuild_scroll_view();
@@ -155,7 +155,7 @@ public class PilotNamesActivity extends Activity
     private void add_delete_button(LinearLayout linear_layout, PilotTag pilot_tag)
     {
         Button new_button = new Button(this);
-        new_button.setText("Effacer");
+        new_button.setText(getResources().getString(R.string.del_pilot_button));
         new_button.setOnClickListener(pilot_name_delete_handler);
         new_button.setTag((Object)pilot_tag);
         new_button.setId(VIEW_ID_BUTTON);       //  set ID for latter retrieval

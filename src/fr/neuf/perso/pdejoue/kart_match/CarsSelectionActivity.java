@@ -158,7 +158,7 @@ public class CarsSelectionActivity extends Activity
     private void display_actual_nb_of_cars()
     {
         Button submit_button = (Button)findViewById(R.id.submit_button);
-        submit_button.setText("Valider (" + Integer.toString(main_application.getActualNbOfCars()) + " voitures)");
+        submit_button.setText(getResources().getString(R.string.ok_button) + " (" + Integer.toString(main_application.getActualNbOfCars()) + " " + getResources().getString(R.string.cars) + ")");
         
         // Set text color. (Red if the actual number of cars is zero. In that case access to the next Activity is blocked.)
         if(main_application.getActualNbOfCars() == 0)

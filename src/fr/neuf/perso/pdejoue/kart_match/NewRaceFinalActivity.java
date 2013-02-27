@@ -50,7 +50,7 @@ public class NewRaceFinalActivity extends Activity
         
         // Edit the introduction text
         TextView text = (TextView)findViewById(R.id.new_race_intro);
-        text.setText("Groupe " + group_nb + ", course " + main_application.getNextRaceNb(group_nb));
+        text.setText(getResources().getString(R.string.group_capitalize) + " " + group_nb + ", " + getResources().getString(R.string.race) + " " + main_application.getNextRaceNb(group_nb));
         
         // Build the scroll view with all pilots belonging to this group
         build_scroll_view();
