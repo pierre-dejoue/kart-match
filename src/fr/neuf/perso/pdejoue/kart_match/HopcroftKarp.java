@@ -13,17 +13,17 @@
  *      
  *   The last link in particular deserves some credits as it is an implementation of the algorithm in
  *   Python done by David Eppstein, which was useful to understand the algorithm and served as a
- *   source of inspiration for this implementation.
+ *   source of inspiration for the implementation in this file.
  *   
  *   Input:
  *      - The input graph (U, V, E) is described as an HashMap<Integer, ArrayList<Integer>>, mapping each 
- *        vertex in U to a list of vertices in V. All vertexes are Integers, and a non-connected vertex
+ *        vertex in U to a list of vertices in V. All vertexes are integers, and a non-connected vertex
  *        from U must be associated with the empty list. Sets U and V can be of different sizes.
- *      - The set V, as an ArrayList<Integer>. (Only used to compute the unmatched output).
- *      - A boolean is also passed as an argument to specify whether the output should be random or not.
+ *      - The set V, as an ArrayList<Integer>. (Its only purpose is to compute the unmatched output).
+ *      - A boolean is also passed as an argument to specify whether the output should be randomized or not.
  *      
- *   Output:
- *      - A boolean, true if the matching was perfect, false otherwise
+ *   Output: an object of type HopcroftKarp.Result containing
+ *      - A boolean, true if the matching was perfect, false otherwise.
  *      - A maximum matching for that graph, returned as a SparseIntArray, mapping a subset of U to a
  *        subset of V.
  *      - A mapping of the remaining, unmatched, vertices of U to the remaining vertices of V.
@@ -53,7 +53,7 @@ public class HopcroftKarp
         public SparseIntArray  matching   = new SparseIntArray();
         public SparseIntArray  unmatched  = new SparseIntArray();
         
-        // Strangely enough, the SparseIntArray.clone() method was not supported on API 7 (Motorola Milestone)
+        // Strangely enough, the SparseIntArray.clone() method was not supported on my Motorola Milestone (Android API 7)
         private static SparseIntArray clone(SparseIntArray arr)
         {
             SparseIntArray out = new SparseIntArray();
@@ -76,7 +76,9 @@ public class HopcroftKarp
         }
     };
     
-    // Utility function used to manipulate hash map of type HashMap<Integer, ArrayList<Integer>>
+    // Utility function used to manipulate a hash map of type HashMap<Integer, ArrayList<Integer>>
+    // This function will return the ArrayList matching the input key, initializing that array in the
+    // case the key was not present in the associative array.
     private static ArrayList<Integer> getValueOrDefault(HashMap<Integer, ArrayList<Integer>> map, Integer key)
     {
         ArrayList<Integer> val = map.get(key);
@@ -89,20 +91,28 @@ public class HopcroftKarp
         return map.get(key);
     }
     
+    //
     // The Hopcroft-Karp algorithm
+    //
     public  static Result findMaximumMatching(HashMap<Integer, ArrayList<Integer>> graph, 
                                               ArrayList<Integer>                   in_vertices_v, 
                                               boolean                              randomize)
     {
         // Local variables:
-        //
-        //
-        HashMap<Integer, Integer>            current_layer_u     = new HashMap<Integer, Integer>();
-        HashMap<Integer, ArrayList<Integer>> current_layer_v     = new HashMap<Integer, ArrayList<Integer>>();
-        HashMap<Integer, Integer>            all_layers_u        = new HashMap<Integer, Integer>();                 // Union of all layers U, except k = 0
-        HashMap<Integer, ArrayList<Integer>> all_layers_v        = new HashMap<Integer, ArrayList<Integer>>();
-        HashMap<Integer, Integer>            matched_v           = new HashMap<Integer, Integer>();
-        ArrayList<Integer>                   unmatched_v         = new ArrayList<Integer>();
+        // The first step of the Hopcroft-Karp algorithm consists in building a list alternating
+        // U-layers and V-layers. The current U/V-layer being processed by the algorithm is stored in
+        // hash maps current_layer_u and current_layer_v. All U-layers (respectively V-layers) shall 
+        // be disjoint from each other. Yet there is no need to store all the layers as they are built,
+        // so the algorithm only keeps track of the union of the previous U-layers and V-layers in hash
+        // maps all_layers_u and all_layers_v.
+        // Finally, hash map matched_v contains the temporary matching built by the algorithm. Upon
+        // completion of the algorithm, it is a maximum matching.
+        HashMap<Integer, Integer>            current_layer_u     = new HashMap<Integer, Integer>();                 // u --> v
+        HashMap<Integer, ArrayList<Integer>> current_layer_v     = new HashMap<Integer, ArrayList<Integer>>();      // v --> list of u
+        HashMap<Integer, Integer>            all_layers_u        = new HashMap<Integer, Integer>();                 // u --> v    
+        HashMap<Integer, ArrayList<Integer>> all_layers_v        = new HashMap<Integer, ArrayList<Integer>>();      // v --> list of u
+        HashMap<Integer, Integer>            matched_v           = new HashMap<Integer, Integer>();                 // v --> u
+        ArrayList<Integer>                   unmatched_v         = new ArrayList<Integer>();                        // list of v
         
         //Log.d("HopcroftKarp.Algo", "graph: " +          graph.toString());
         //Log.d("HopcroftKarp.Algo", "in_vertices_v: " +  in_vertices_v.toString());
@@ -218,10 +228,10 @@ public class HopcroftKarp
     }
     
     // Recursive function used to build an augmenting path starting from the end node v. 
-    // Uses DFS on the U and V layers built during the first phase of the algorithm.
-    // This is by the way this function which is responsible for most of the 
-    // randomization of the output.
-    // Returns true if an augmenting path was found.
+    // It relies on a DFS on the U and V layers built during the first phase of the algorithm.
+    // This is by the way this function which is responsible for most of the randomization
+    // of the output.
+    // Returns true if an augmenting path is found.
     private static boolean recFindAugmentingPath(Integer v, 
                                                  HashMap<Integer, Integer>            all_layers_u, 
                                                  HashMap<Integer, ArrayList<Integer>> all_layers_v,
@@ -261,7 +271,7 @@ public class HopcroftKarp
     }
     
     // Given an input associative array that stores (key, value) pairs, and assuming that all values are unique,
-    // the following function return the reverse mapping: (value, key) pairs.
+    // the following function return the reverse mapping: i.e. the map of (value, key) pairs.
     public static SparseIntArray get_reverse_mapping(HashMap<Integer, Integer> input_map)
     {
         SparseIntArray reversed_map = new SparseIntArray(); 
@@ -275,7 +285,7 @@ public class HopcroftKarp
         return reversed_map;
     }
     
-    // Associates all unmatched vertices of U with remaning vertices of from V. Shuffle the result if required
+    // Associates all unmatched vertices of U with remaining vertices of from V. Shuffle the result if required
     private static SparseIntArray build_unmatched_set(HashMap<Integer, ArrayList<Integer>> graph,
                                                       HashMap<Integer, Integer>            matched_v,
                                                       ArrayList<Integer>                   in_vertices_v,
@@ -322,7 +332,7 @@ public class HopcroftKarp
     // Test functions (DEBUG ONLY)
     //
     
-    public static void GenericTest( HashMap<Integer, ArrayList<Integer>> graph, 
+    private static void GenericTest(HashMap<Integer, ArrayList<Integer>> graph, 
                                     ArrayList<Integer>                   in_vertices_v, 
                                     boolean                              randomize)
     {       
