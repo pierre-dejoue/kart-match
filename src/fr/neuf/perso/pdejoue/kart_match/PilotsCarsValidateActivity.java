@@ -17,11 +17,15 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 public class PilotsCarsValidateActivity extends Activity 
 {
     private CustomApplication main_application = null;
+    
+    // Max number of groups to avoid overloading the UI
+    private static final int MAX_NUMBER_OF_GROUPS = 6;
  
     //
     // Overridden methods
@@ -41,11 +45,29 @@ public class PilotsCarsValidateActivity extends Activity
         main_application.setNbOfGroups();
         
         // Set executive summary text
-        TextView summary = (TextView)findViewById(R.id.groups);
-        summary.setText(getResources().getString(R.string.final_validate_nb_of_pilots) + " " + Integer.toString(main_application.nb_of_pilots)        + "\n" + 
-                        getResources().getString(R.string.final_validate_nb_of_cars)   + " " + Integer.toString(main_application.getActualNbOfCars()) + "\n" + 
-                        getResources().getString(R.string.final_validate_nb_of_groups) + " " + Integer.toString(main_application.getNbOfGroups())              
-                       );
+        TextView summary_1 = (TextView)findViewById(R.id.pilots_cars);
+        summary_1.setText(getResources().getString(R.string.final_validate_nb_of_pilots) + " " + Integer.toString(main_application.nb_of_pilots)        + "\n" + 
+                          getResources().getString(R.string.final_validate_nb_of_cars)   + " " + Integer.toString(main_application.getActualNbOfCars())
+                         );
+        
+        
+        
+        TextView summary_2 = (TextView)findViewById(R.id.groups);
+        if(main_application.getNbOfGroups() <= MAX_NUMBER_OF_GROUPS)
+        {
+            summary_2.setText(getResources().getString(R.string.final_validate_nb_of_groups) + " " + Integer.toString(main_application.getNbOfGroups()));
+        }
+        else
+        {
+            summary_2.setText(getResources().getString(R.string.final_validate_nb_of_groups) + " " + Integer.toString(main_application.getNbOfGroups())  + "\n\n\n" + 
+                              getResources().getString(R.string.nb_of_groups_warning_1) + " " + MAX_NUMBER_OF_GROUPS + " " + getResources().getString(R.string.nb_of_groups_warning_2));
+            summary_2.setTextColor(getResources().getColor(R.color.dark_red));
+            
+            Button button = (Button)findViewById(R.id.confirm_button);
+            button.setTextColor(getResources().getColor(R.color.dark_red));
+        }
+        
+        
     }
 
     /**
@@ -85,15 +107,18 @@ public class PilotsCarsValidateActivity extends Activity
     
     public void gotoNextActivity(View v)
     {
-        // Reset the race history
-        main_application.reset_race_history();
-        
-        // Launch next activity if actual number of cars is different from zero
-        Intent intent = new Intent(this, RaceHistoryActivity.class);
-        startActivity(intent);
-        
-        // Do not keep this Activity in memory
-        finish();
+        if(main_application.getNbOfGroups() <= MAX_NUMBER_OF_GROUPS)
+        {
+            // Reset the race history
+            main_application.reset_race_history();
+            
+            // Launch next activity if actual number of cars is different from zero
+            Intent intent = new Intent(this, RaceHistoryActivity.class);
+            startActivity(intent);
+            
+            // Do not keep this Activity in memory
+            finish();
+        }
     }
 
 }

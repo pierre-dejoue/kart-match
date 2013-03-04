@@ -10,14 +10,23 @@
     tools:context=".PilotsCarsValidateActivity" >
 
     <TextView
+        android:id="@+id/pilots_cars"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+	    android:layout_weight="0.5"
+	    android:gravity="center_horizontal|bottom"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/nb_of_pilots_and_cars" />
+
+    <TextView
         android:id="@+id/groups"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="center"
+	    android:layout_weight="0.5"
+	    android:gravity="center_horizontal|top"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="@string/nb_of_groups" />
-    
+        
     <Button
         android:id="@+id/confirm_button"
         android:layout_width="match_parent"
