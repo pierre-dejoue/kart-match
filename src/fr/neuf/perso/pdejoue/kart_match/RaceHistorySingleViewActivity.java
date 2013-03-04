@@ -102,7 +102,8 @@ public class RaceHistorySingleViewActivity extends Activity
                 EditText new_text_view = new EditText(this);
                 new_text_view.setText(main_application.getPilotName(index));
                 new_text_view.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, 1.0f));
-                new_text_view.setInputType(InputType.TYPE_NULL);                    // The text cannot be edited
+                new_text_view.setInputType(InputType.TYPE_NULL);                    // The text cannot be edited with the soft keypad
+                new_text_view.setFocusable(false);                                  // The text cannot be edited
                 new_horiz_layout.addView(new_text_view);
                 
                 ImageView new_image_view = new ImageView(this);
@@ -122,7 +123,8 @@ public class RaceHistorySingleViewActivity extends Activity
                     new_text_view_car_id.setTextColor(getResources().getColor(R.color.dark_red));
                 }
                 new_text_view_car_id.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-                new_text_view_car_id.setInputType(InputType.TYPE_NULL);             // The text cannot be edited
+                new_text_view_car_id.setInputType(InputType.TYPE_NULL);             // The text cannot be edited with the soft keypad
+                new_text_view_car_id.setFocusable(false);                           // The text cannot be edited
                 new_text_view_car_id.setEms(3);
                 new_text_view_car_id.setGravity(Gravity.RIGHT);
                 new_horiz_layout.addView(new_text_view_car_id);

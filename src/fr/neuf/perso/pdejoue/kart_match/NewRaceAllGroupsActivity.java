@@ -205,7 +205,8 @@ public class NewRaceAllGroupsActivity extends Activity
             new_text_view.setText(main_application.getPilotName(index));
             new_text_view.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, 1.0f));
             new_text_view.setTag((Object)pilot_tag); 
-            new_text_view.setInputType(InputType.TYPE_NULL);            // The text cannot be edited
+            new_text_view.setInputType(InputType.TYPE_NULL);            // The text cannot be edited (with soft keypad)
+            new_text_view.setFocusable(false);                          // The text cannot be edited
             new_horiz_layout.addView(new_text_view);
             
             // Add radio buttons for group selection

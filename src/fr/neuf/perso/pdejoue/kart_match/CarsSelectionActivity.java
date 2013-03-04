@@ -138,7 +138,8 @@ public class CarsSelectionActivity extends Activity
             EditText new_text_view = new EditText(this);
             new_text_view.setText(Integer.toString(car_number));
             new_text_view.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, 1.0f));
-            new_text_view.setInputType(InputType.TYPE_NULL);            // The text cannot be edited
+            new_text_view.setInputType(InputType.TYPE_NULL);            // The text cannot be edited (via soft keypad)
+            new_text_view.setFocusable(false);                          // The text cannot be edited
             new_horiz_layout.addView(new_text_view);
                      
             CheckBox new_checkbox = new CheckBox(this);
