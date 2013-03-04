@@ -1,5 +1,5 @@
 /**
- * KartMatch: NewRaceFinal.java
+ * KartMatch: NewRaceFinalActivity.java
  *
  *   Confirmation screen for the new race.
  *

@@ -1,7 +1,7 @@
 /**
  * KartMatch: CustomApplication.java
  *
- *   The Main Application. It contains all the data common to all activities
+ *   The Main Application. It contains the data common to all activities, and defines all the utility functions needed to manipulate those data.
  *
  * Copyright (C) 2013, Pierre DEJOUE
  * All rights reserved.

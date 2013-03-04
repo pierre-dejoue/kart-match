@@ -1,7 +1,7 @@
 /**
  * KartMatch: RaceHistoryActivity.java
  *
- *   Screen that lists all the previous races, and allow to access detailled information on them.
+ *   Screen that lists all the previous races, and allow to access detailed information on them.
  *
  * Copyright (C) 2013, Pierre DEJOUE
  * All rights reserved.

@@ -48,7 +48,7 @@ public class StartActivity extends Activity
         main_application = (CustomApplication)getApplication();
         
         //
-        //    Read from Preferences the number of pilots and number of vehicules used during the previous session
+        //    Read from Preferences the number of pilots and number of vehicles used during the previous session
         //
         settings = getPreferences(Context.MODE_PRIVATE);
         
