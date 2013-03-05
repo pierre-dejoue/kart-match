@@ -9,4 +9,8 @@ To solve that problem, I used a "randomized" version of the Hopcroft-Karp algori
 
 Download the application on my website: <a href="http://pdejoue.perso.neuf.fr/section_stuff/technical/kartmatch.php?lang=EN">Get the app!</a>
 
-<img src="https://github.com/pierre-dejoue/kart-match/blob/master/screenshots/KartMatch_01.jpg?raw=true" />
+<img src="https://github.com/pierre-dejoue/kart-match/blob/master/screenshots/en/KartMatch_01.jpg?raw=true" />
+
+<img src="https://github.com/pierre-dejoue/kart-match/blob/master/screenshots/en/KartMatch_02.jpg?raw=true" />
+
+<img src="https://github.com/pierre-dejoue/kart-match/blob/master/screenshots/en/KartMatch_03.jpg?raw=true" />
