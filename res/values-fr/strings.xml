@@ -2,9 +2,6 @@
 <resources>
 
     <string name="app_name">KartMatch</string>
-    <string name="about_menu">About</string>
-    <string name="about_title">About KartMatch</string>
-    <string name="about_message">\nOpen source software available on GitHub:\nhttp://github.com/pierre-dejoue/kart-match\n</string>
     <string name="kart_match_intro">Entrez le nombre de pilotes ainsi que numéro de kart le plus élevé :</string>
     <string name="pilot_names">Vous pouvez éditer le nom des pilotes :</string>
     <string name="pilot_groups">Vous pouvez modifier la composition des groupes :</string>

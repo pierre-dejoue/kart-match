@@ -4,7 +4,16 @@
     <string name="app_name">KartMatch</string>
     <string name="about_menu">About</string>
     <string name="about_title">About KartMatch</string>
-    <string name="about_message">\nOpen source software available on GitHub:\nhttp://github.com/pierre-dejoue/kart-match\n</string>
+    <string name="about_message"><![CDATA[<html>
+											 <head></head>
+											 <body>
+											     <div align=\"center\"><p><font color="#FFBF00">Copyright &copy; 2013, Pierre Dejoue</font></p>
+											                           <p>Version: %1$s</p>
+											     </div>
+											     <p><b>KartMatch</b> is an application designed to randomly assign vehicles to pilots in the context of a kart racing championship.</p>
+											     <p>It is open source, available on GitHub: <a href="https://github.com/pierre-dejoue/kart-match">github.com/pierre-dejoue/kart-match</a></p>
+											 </body>
+										  </html>]]></string>
     <string name="kart_match_intro">Enter the number of pilots and the max car identifier:</string>
     <string name="pilot_names">You can edit the names of the pilots:</string>
     <string name="pilot_groups">You can modify the group composition:</string>

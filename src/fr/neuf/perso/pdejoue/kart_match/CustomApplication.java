@@ -24,14 +24,13 @@ import android.app.AlertDialog;
 import android.app.Application;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.text.SpannableString;
-import android.text.method.LinkMovementMethod;
-import android.text.util.Linkify;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.util.SparseIntArray;
-import android.view.Gravity;
 import android.view.ViewGroup.LayoutParams;
+import android.webkit.WebView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 @SuppressLint("UseSparseArrays")
 public class CustomApplication extends Application  
@@ -118,15 +117,27 @@ public class CustomApplication extends Application
     
     public void about_dialog(Context context)
     {
-        SpannableString str = new SpannableString(context.getText(R.string.about_message));
-        Linkify.addLinks(str, Linkify.WEB_URLS);
+        //SpannableString str = new SpannableString(context.getText(R.string.about_message));
+        // Spanned str = Html.fromHtml(context.getText(R.string.about_message).toString());
+        //Linkify.addLinks(str, Linkify.WEB_URLS);  
+
+        PackageManager manager = context.getPackageManager();
+        PackageInfo info = null;
+        try 
+        {
+            info = manager.getPackageInfo(context.getPackageName(), 0);
+        } 
+        catch (NameNotFoundException e) 
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         
-        TextView about_message = new TextView(context);
+        WebView about_message = new WebView(context);
         about_message.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-        about_message.setGravity(Gravity.CENTER);
-        about_message.setTextAppearance(context, android.R.attr.textAppearanceLarge);
-        about_message.setText(str);
-        about_message.setMovementMethod(LinkMovementMethod.getInstance());
+        String html_str = String.format(getResources().getString(R.string.about_message), info.versionName);
+        about_message.loadData(html_str, "text/html", "utf-8");
+
         
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(R.string.about_title);
