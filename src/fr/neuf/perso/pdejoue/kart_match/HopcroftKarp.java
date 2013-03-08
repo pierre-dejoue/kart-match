@@ -117,10 +117,10 @@ public class HopcroftKarp
         //Log.d("HopcroftKarp.Algo", "graph: " +          graph.toString());
         //Log.d("HopcroftKarp.Algo", "in_vertices_v: " +  in_vertices_v.toString());
         
-        // Loop an finding a minimal augmenting path
+        // Loop as long as we can find at least one minimal augmenting path
         while(true)
         {
-            int k = 0;  // U-layers have indexes n = 2*k; V-layers have indexes n = 2*k+1.
+            int k = 0;  // U-layers have indexes n = 2*k ; V-layers have indexes n = 2*k+1.
             
             //Log.d("HopcroftKarp.Algo", "matched_v: " +  matched_v.toString());
             
@@ -143,7 +143,7 @@ public class HopcroftKarp
             //  - The edges between U-layer 2*k   and V-layer 2*k+1 are unmatched ones.
             //  - The edges between V-layer 2*k+1 and U-layer 2*k+2 are matched ones.
             
-            // While the current layer U is not empty and no unmatched V was encountered
+            // While the current layer U is not empty and no unmatched V is encountered
             while(!current_layer_u.isEmpty() && unmatched_v.isEmpty())
             {
                 //Log.d("HopcroftKarp.Algo", "current_layer_u: " + current_layer_u.toString());
