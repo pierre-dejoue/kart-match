@@ -11,6 +11,8 @@ package fr.neuf.perso.pdejoue.kart_match;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -140,6 +142,40 @@ public class NewRaceFinalActivity extends Activity
         
         // Redraw the scroll view
         pilot_list.invalidate();
+    }
+    
+    @Override
+    public void onBackPressed() 
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.new_race_dialog_title);
+        builder.setCancelable(true);
+        builder.setIcon(android.R.drawable.stat_notify_error);
+        builder.setMessage(R.string.new_race_dialog_message);
+        builder.setPositiveButton(android.R.string.ok,
+                    new DialogInterface.OnClickListener() 
+                    {
+                        public void onClick(DialogInterface dialog, int id) 
+                        {
+                        	NewRaceFinalActivity.super.onBackPressed();
+                        }
+                    });       
+        builder.setNegativeButton(android.R.string.cancel,
+                    new DialogInterface.OnClickListener() 
+                    {
+                        public void onClick(DialogInterface dialog, int id) 
+                        {
+                            dialog.cancel();
+                        }
+                    });
+            
+        AlertDialog alert = builder.create();
+        alert.show();
+    }  
+
+    public void cancelRace(View v)
+    {  
+    	onBackPressed();
     }
     
     public void addRaceToHistory(View v)

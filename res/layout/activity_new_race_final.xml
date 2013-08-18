@@ -29,7 +29,13 @@
 		    android:orientation="vertical"
 		/>        
     </ScrollView>
-    
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="cancelRace"
+        android:text="@string/cancel_button" />
+        
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -8,6 +8,7 @@
     <string name="cars_selection">Sélectionnez les voitures effectivement disponibles :</string>
     <string name="ok_button">Valider</string>
     <string name="save_button">Sauvegarder</string>
+    <string name="cancel_button">Annuler</string>
     <string name="confirm_button">Confirmer</string>
     <string name="new_race_button">Nouvelle course</string>
     <string name="del_pilot_button">Effacer</string>
@@ -17,7 +18,7 @@
     <string name="nb_of_groups_warning_1">Le nombre de groupes est limité à</string>
     <string name="nb_of_groups_warning_2">afin d\'éviter de surcharger la UI. Veuillez revenir en arrière.</string>
     <string name="pilot_names_activity_intro_1">Vous avez demandé</string>
-    <string name="pilot_names_activity_intro_2">pilotes.\nVous pouvez éditer leurs noms (ou pas) :</string>
+    <string name="pilot_names_activity_intro_2">pilotes.\nVous pouvez éditer leurs noms :</string>
     <string name="final_validate_nb_of_pilots">Nombre de pilotes :</string>
     <string name="final_validate_nb_of_cars">Nombre de voitures :</string>
     <string name="final_validate_nb_of_groups">Nombre de groupes :</string>
@@ -29,6 +30,8 @@
     <string name="empty_history">Il n\'y a pour l\'instant aucune course dans l\'historique, pressez le bouton \"Nouvelle course\" ci-dessous !</string>
     <string name="race_view_introduction">Détail de la course N :</string>
     <string name="new_race_intro">Nouvelle course :</string>
+    <string name="new_race_dialog_title">Attention</string>
+    <string name="new_race_dialog_message">Cette course n\'est pas sauvegardée ! Voulez-vous vraiment l\'effacer ?</string>
     <string name="group_first_letter">G</string>
     <string name="group_capitalize">Groupe</string>
     <string name="race">course</string>

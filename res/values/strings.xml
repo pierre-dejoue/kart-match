@@ -20,6 +20,7 @@
     <string name="cars_selection">Select the cars that are actually available:</string>
     <string name="ok_button">Confirm</string>
     <string name="save_button">Save in History</string>
+    <string name="cancel_button">Cancel</string>
     <string name="confirm_button">Confirm</string>
     <string name="new_race_button">New race</string>
     <string name="del_pilot_button">Delete</string>
@@ -35,12 +36,14 @@
     <string name="final_validate_nb_of_groups">Number of groups:</string>
     <string name="history_introduction">Races that are currently listed in the history:</string>
     <string name="history_dialog_title">Caution</string>
-    <string name="history_dialog_message">The race history will be fully cleared! Do you want to continue?</string>
+    <string name="history_dialog_message">The history will be fully deleted! Do you want to continue?</string>
     <string name="history_delete_dialog_title">Caution</string>
     <string name="history_delete_dialog_message">That action will permanently delete that race. Do you want to continue?</string>
     <string name="empty_history">There is currently no race listed in the history, press the \"New race\" button below to start the first one!</string>
     <string name="race_view_introduction">Details of race N:</string>
     <string name="new_race_intro">New race:</string>
+    <string name="new_race_dialog_title">Caution</string>
+    <string name="new_race_dialog_message">This race was not saved in the history! Do you want to erase it?</string>
     <string name="group_first_letter">G</string>
     <string name="group_capitalize">Group</string>
     <string name="race">race</string>
