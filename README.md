@@ -14,3 +14,7 @@ Download the application on <a href="https://play.google.com/store/apps/details?
 <img src="https://github.com/pierre-dejoue/kart-match/blob/master/screenshots/en/KartMatch_02.jpg?raw=true" />
 
 <img src="https://github.com/pierre-dejoue/kart-match/blob/master/screenshots/en/KartMatch_03.jpg?raw=true" />
+
+## License
+
+[![License](http://img.shields.io/:license-mit-blue.svg?style=flat-square)](./LICENSE)

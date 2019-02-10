@@ -5,9 +5,6 @@
  *   and the maximum number of cars (which is distinct from the actual number of cars actually used during a race, the maximum number
  *   of cars is more easily understood as the highest car index, knowing that not all cars are in use)
  *
- * Copyright (C) 2013, Pierre DEJOUE
- * All rights reserved.
- * This software may be modified and distributed under the terms of the BSD license. See the LICENSE file for details. 
  */
 package fr.neuf.perso.pdejoue.kart_match;
 

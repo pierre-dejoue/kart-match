@@ -3,9 +3,6 @@
  *
  *   The Main Application. It contains the data common to all activities, and defines all the utility functions needed to manipulate those data.
  *
- * Copyright (C) 2013, Pierre DEJOUE
- * All rights reserved.
- * This software may be modified and distributed under the terms of the BSD license. See the LICENSE file for details. 
  */
 package fr.neuf.perso.pdejoue.kart_match;
 

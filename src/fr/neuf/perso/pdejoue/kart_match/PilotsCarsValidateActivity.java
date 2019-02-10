@@ -3,9 +3,6 @@
  *
  *   Validation screen for the number of pilots, the number of cars and the number of groups. After that screen, those numbers are fixed.
  *
- * Copyright (C) 2013, Pierre DEJOUE
- * All rights reserved.
- * This software may be modified and distributed under the terms of the BSD license. See the LICENSE file for details. 
  */
 package fr.neuf.perso.pdejoue.kart_match;
 

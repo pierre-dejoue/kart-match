@@ -7,7 +7,7 @@
     <string name="about_message"><![CDATA[<html>
 											 <head></head>
 											 <body>
-											     <div align=\"center\"><p><font color="#FFBF00">Copyright &copy; 2013, Pierre Dejoue</font></p>
+											     <div align=\"center\"><p><font color="#FFBF00">Copyright &copy; 2013 Pierre Dejoue</font></p>
 											                           <p>Version: %1$s</p>
 											     </div>
 											     <p><b>KartMatch</b> is an application designed to randomly assign vehicles to pilots in the context of a kart racing championship.</p>
